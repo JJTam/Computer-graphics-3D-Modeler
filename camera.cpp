@@ -130,8 +130,8 @@ void Camera::dragMouse( int x, int y )
 		{
 			calculateViewingTransformParameters();
 
-			double xTrack =  -mouseDelta[0] * kMouseTranslationXSensitivity;
-			double yTrack =  mouseDelta[1] * kMouseTranslationYSensitivity;
+			double xTrack = -mouseDelta[0] * kMouseTranslationXSensitivity;
+			double yTrack = mouseDelta[1] * kMouseTranslationYSensitivity;
 
 			Vec3f transXAxis = mUpVector ^ (mPosition - mLookAt);
 			transXAxis /= sqrt((transXAxis*transXAxis));
@@ -144,8 +144,8 @@ void Camera::dragMouse( int x, int y )
 		}
 	case kActionRotate:
 		{
-			float dAzimuth		=   -mouseDelta[0] * kMouseRotationSensitivity;
-			float dElevation	=   mouseDelta[1] * kMouseRotationSensitivity;
+			float dAzimuth = -mouseDelta[0] * kMouseRotationSensitivity;
+			float dElevation = mouseDelta[1] * kMouseRotationSensitivity;
 			
 			setAzimuth(getAzimuth() + dAzimuth);
 			setElevation(getElevation() + dElevation);
@@ -178,9 +178,42 @@ void Camera::applyViewingTransform() {
 
 	// Place the camera at mPosition, aim the camera at
 	// mLookAt, and twist the camera such that mUpVector is up
-	gluLookAt(	mPosition[0], mPosition[1], mPosition[2],
-				mLookAt[0],   mLookAt[1],   mLookAt[2],
-				mUpVector[0], mUpVector[1], mUpVector[2]);
+	//gluLookAt(mPosition[0], mPosition[1], mPosition[2],
+	//			mLookAt[0],   mLookAt[1],   mLookAt[2],
+	//			mUpVector[0], mUpVector[1], mUpVector[2]);
+
+	// Call our lookAt function
+	lookAt(mPosition, mLookAt, mUpVector);
+
+}
+
+
+/* 
+* Ref: https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml
+*
+*/
+void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up) {
+
+	Vec3f Ftor(at[0] - eye[0], at[1] - eye[1], at[2] - eye[2]);
+	Vec3f Uptor(up[0], up[1], up[2]);
+	Ftor.normalize();
+	Uptor.normalize();
+
+	Vec3f S = Ftor ^ Uptor;
+	Vec3f U = S ^ Ftor;
+
+	Mat4f M (
+		S[0],		S[1],		S[2],		0,
+		U[0],		U[1],		U[2],		0,
+		-Ftor[0],	-Ftor[1],	-Ftor[2],	0,
+		0,			0,			0,			1
+	);
+
+	float mat[16];
+	M.getGLMatrix(mat);
+
+	glMultMatrixf(mat);
+	glTranslated(-eye[0], -eye[1], -eye[2]);
 }
 
 #pragma warning(pop)
