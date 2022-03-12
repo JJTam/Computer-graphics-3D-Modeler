@@ -5,6 +5,7 @@
 #include <FL/gl.h>
 
 #include "modelerglobals.h"
+#include "bitmap.h"
 
 class Keepon: public ModelerView
 {

@@ -111,6 +111,31 @@ void drawWeapon()
 	glPopMatrix();
 }
 
+void drawHatWithTexture()
+{
+	int width, height, nrChannels;
+	unsigned char* data = readBMP("wildf.bmp", width, height);
+
+	unsigned int texture;
+	glGenTextures(1, &texture);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	drawHat();
+
+	glDisable(GL_TEXTURE_2D);
+
+}
+
 void Keepon::draw()
 {
 	// This call takes care of a lot of the nasty projection 
@@ -210,7 +235,8 @@ void Keepon::draw()
 				if (VAL(LEVEL_OF_DETAILS) > 3)
 				{
 					// draw the hat
-					drawHat();
+					//drawHat();
+					drawHatWithTexture();
 				}
 				glPopMatrix();
 
