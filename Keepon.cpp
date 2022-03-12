@@ -20,6 +20,8 @@ void Keepon::draw()
 		endAnimation();
 	}
 
+	setDefaultLight();
+
 	// draw the floor
 	setAmbientColor(.1f, .1f, .1f);
 	setDiffuseColor(COLOR_RED);
@@ -91,6 +93,31 @@ void Keepon::endAnimation() {
 }
 
 
+void Keepon::setDefaultLight() {
+
+	// Enable lighting
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	
+	GLfloat lightPosition[] = { VAL(XLIGHT), VAL(YLIGHT), VAL(ZLIGHT), 0 };
+	GLfloat lightDiffuse[] = { VAL(INTENSITY), VAL(INTENSITY), VAL(INTENSITY), VAL(INTENSITY) };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse);
+
+
+	// Add Specular Reflection
+	GLfloat white[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+	GLfloat cyan[] = { 0.f, .8f, .8f, 1.f };
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	GLfloat shininess[] = { 50 };
+	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
+
+}
+
 
 int main()
 {
@@ -103,6 +130,10 @@ int main()
 	controls[ZPOS] = ModelerControl("Z Position", -5, 5, 0.1f, 0);
 	controls[HEIGHT] = ModelerControl("Height", 1, 2.5, 0.1f, 1);
 	controls[ROTATE] = ModelerControl("Rotate", -135, 135, 1, 0);
+	controls[XLIGHT] = ModelerControl("Default Light X Position", -30, 30, 0.1f, 8);
+	controls[YLIGHT] = ModelerControl("Default Light Y Position", -30, 30, 0.1f, 12);
+	controls[ZLIGHT] = ModelerControl("Default Light Z Position", -30, 30, 0.1f, 9);
+	controls[INTENSITY] = ModelerControl("Default Light Intensity", 0, 5, 0.1f, 1.3);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();

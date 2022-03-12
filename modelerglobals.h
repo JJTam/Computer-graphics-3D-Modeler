@@ -8,9 +8,18 @@
 // This is a list of the controls for the SampleModel
 // We'll use these constants to access the values 
 // of the controls from the user interface.
-enum SampleModelControls
+enum KeeponModelControls
 { 
-	XPOS, YPOS, ZPOS, HEIGHT, ROTATE, NUMCONTROLS
+	XPOS, 
+	YPOS, 
+	ZPOS, 
+	HEIGHT, 
+	ROTATE, 
+	XLIGHT,
+	YLIGHT,
+	ZLIGHT,
+	INTENSITY,
+	NUMCONTROLS
 };
 
 // Colors

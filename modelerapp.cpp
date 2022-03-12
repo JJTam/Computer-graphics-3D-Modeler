@@ -37,7 +37,7 @@ void ModelerControl::SetVals(const char* name, float minimum, float maximum, flo
 	strncpy(m_name,name, 128);
 	m_minimum  = minimum;
 	m_maximum  = maximum;
-	m_stepsize = stepsize;
+	m_stepsize = round(stepsize);
 	m_value    = value;
 }
 

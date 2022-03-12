@@ -19,6 +19,8 @@ public:
 	void startAnimation();
 	void endAnimation();
 
+	void setDefaultLight();
+
 
 private:
 
