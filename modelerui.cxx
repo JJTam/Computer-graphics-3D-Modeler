@@ -293,7 +293,7 @@ void ModelerUserInterface::cb_m_modelerWindow(Fl_Window* o, void* v) {
 
 ModelerUserInterface::ModelerUserInterface() {
   Fl_Window* w;
-  { Fl_Window* o = m_controlsWindow = new Fl_Window(395, 326, "CS 341 Modeler (SP02)");
+  { Fl_Window* o = m_controlsWindow = new Fl_Window(395, 326, "COMP 4411 Modeler (SP02)");
     w = o;
     o->callback((Fl_Callback*)cb_m_controlsWindow, (void*)(this));
     o->when(FL_WHEN_NEVER);

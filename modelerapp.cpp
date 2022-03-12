@@ -152,6 +152,12 @@ void ModelerApplication::SetControlValue(int controlNumber, double value)
     m_controlValueSliders[controlNumber]->value(value);
 }
 
+
+bool ModelerApplication::GetAnimating() {
+    return m_animating;
+}
+
+
 void ModelerApplication::ShowControl(int controlNumber)
 {
     m_controlLabelBoxes[controlNumber]->show();

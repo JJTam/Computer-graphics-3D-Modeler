@@ -50,6 +50,7 @@ public:
     // Get and set slider values.
     double GetControlValue(int controlNumber);
     void   SetControlValue(int controlNumber, double value);
+	bool   GetAnimating();
 
 private:
 	// Private for singleton

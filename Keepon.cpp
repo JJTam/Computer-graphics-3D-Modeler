@@ -1,7 +1,8 @@
 #include <FL/gl.h>
 #include "modelerglobals.h"
 #include "Keepon.h"
-#include "Keepon.h"
+#include <math.h>
+
 
 void Keepon::draw()
 {
@@ -9,6 +10,15 @@ void Keepon::draw()
 	// matrix stuff.  Unless you want to fudge directly with the 
 	// projection matrix, don't bother with this ...
 	ModelerView::draw();
+
+	// Start animation
+	if (ModelerApplication::Instance()->GetAnimating()) {
+		startAnimation();
+		i += 2;
+	}
+	else {
+		endAnimation();
+	}
 
 	// draw the floor
 	setAmbientColor(.1f, .1f, .1f);
@@ -22,7 +32,7 @@ void Keepon::draw()
 	setAmbientColor(.1f, .1f, .1f);
 	setDiffuseColor(COLOR_GREEN);
 	glPushMatrix();
-	glTranslated(VAL(XPOS), VAL(YPOS), VAL(ZPOS));
+	glTranslated(VAL(XPOS) + animatedX, VAL(YPOS) + animatedY, VAL(ZPOS) + animatedZ);
 
 		// draw the bottom sphere
 		glPushMatrix();
@@ -59,6 +69,28 @@ ModelerView* createKeeponModel(int x, int y, int w, int h, char* label)
 {
 	return new Keepon(x, y, w, h, label);
 }
+
+
+void Keepon::startAnimation() {
+
+	float theta = i * M_PI / 180;
+	float radius = 2.5;
+	animatedX = cos(theta) * 2;
+	animatedZ = sin(theta) * radius;
+
+}
+
+// Reset all animated values
+void Keepon::endAnimation() {
+	animatedX = 0.0; 
+	animatedY = 0.0; 
+	animatedZ = 0.0; 
+	animatedAngle = 0.0;
+	i = 0;
+
+}
+
+
 
 int main()
 {
