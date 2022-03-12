@@ -38,6 +38,43 @@ void drawHead()
 	glPopMatrix();
 }
 
+// Build a complex shape as a set of polygonal faces, using the "triangle" primitive to render them.
+void drawDiamond()
+{
+	// point A (1, 0, 0)
+	// point B (0, 0, 1)
+	// point C (-1, 0, 0)
+	// point D (0, 0, -1)
+	// point E (0, -1, 0)
+	// point F (0, 1, 0)
+
+	// triangle ABE
+	setDiffuseColor(COLOR_RED);
+	drawTriangle(1, 0, 0, 0, 0, 1, 0, -1, 0);
+	// triangle BCE
+	setDiffuseColor(COLOR_BLUE);
+	drawTriangle(0, 0, 1, -1, 0, 0, 0, -1, 0);
+	// triangle DCE
+	setDiffuseColor(COLOR_RED);
+	drawTriangle(0, 0, -1, -1, 0, 0, 0, -1, 0);
+	// triangle ADE
+	setDiffuseColor(COLOR_GREEN);
+	drawTriangle(1, 0, 0, 0, 0, -1, 0, -1, 0);
+
+	// triangle AFB
+	setDiffuseColor(COLOR_GREEN);
+	drawTriangle(1, 0, 0, 0, 1, 0, 0, 0, 1);
+	// triangle BFC
+	setDiffuseColor(COLOR_RED);
+	drawTriangle(0, 0, 1, 0, 1, 0, -1, 0, 0);
+	// triangle DFC
+	setDiffuseColor(COLOR_BLUE);
+	drawTriangle(0, 0, -1, 0, 1, 0, -1, 0, 0);
+	//triangle DFA
+	setDiffuseColor(COLOR_RED);
+	drawTriangle(0, 0, -1, 0, 1, 0, 1, 0, 0);
+}
+
 void drawHat()
 {
 	glPushMatrix();
@@ -45,10 +82,7 @@ void drawHat()
 	glTranslated(0.0, 0.03, 0.0);
 	drawCylinder(1.0, 0.5, 0.5);
 	glRotated(90, 1, 0, 0);
-	glTranslated(0.0, 1.0, 0.0);
-	drawTriangle(0.5, 0.0, 0.0, 0.0, 0.7, 0.0, -0.5, 0.0, 0.0);
-	glRotated(90, 0, 1, 0);
-	drawTriangle(0.5, 0.0, 0.0, 0.0, 0.7, 0.0, -0.5, 0.0, 0.0);
+	glTranslated(0.0, 2.0, 0.0);
 	glPopMatrix();
 
 }
@@ -135,6 +169,7 @@ void drawHatWithTexture()
 	glDisable(GL_TEXTURE_2D);
 
 }
+
 
 void Keepon::draw()
 {
@@ -238,6 +273,9 @@ void Keepon::draw()
 					//drawHat();
 					drawHatWithTexture();
 				}
+				glRotated(90, 1.0, 0.0, 0.0);
+				glTranslated(0.0, 2.0, 0.0);
+				drawDiamond();
 				glPopMatrix();
 
 			glPopMatrix();

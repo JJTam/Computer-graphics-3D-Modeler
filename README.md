@@ -35,8 +35,8 @@ Delete yes/no when appropriate
 W dramatic light					yes
 W adjustable LoD					yes
 W your idea 						yes/no
-B texture map						yes/no
-B polygonal faces (triangles)				yes/no 
+B texture map						yes
+B polygonal faces (triangles)				yes 
 B animation       					yes
 B individual looking (not just red/green) 		yes/no
 B frame all						yes/no 
