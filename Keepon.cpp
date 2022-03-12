@@ -10,7 +10,25 @@ void drawTorso()
 
 void drawHead()
 {
+	glPushMatrix();
+	// draw head
 	drawSphere(1.0);
+	
+		int eye_angle = 20;
+		glPushMatrix();
+		glRotated(eye_angle, 0, 1, 0);
+		glTranslated(0, 0, 1);
+		// draw left eye
+		drawSphere(0.1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glRotated(-eye_angle, 0, 1, 0);
+		glTranslated(0, 0, 1);
+		// draw right eye
+		drawSphere(0.1);
+		glPopMatrix();
+	glPopMatrix();
 }
 
 void drawHat()
@@ -28,7 +46,7 @@ void drawHat()
 
 }
 
-void drawUpperLeftArm()
+void drawUpperRightArm()
 {
 	glPushMatrix();
 	glTranslated(0, 0.25, -0.25);
@@ -37,7 +55,7 @@ void drawUpperLeftArm()
 	glPopMatrix();
 }
 
-void drawUpperRightArm()
+void drawUpperLeftArm()
 {
 	glPushMatrix();
 	glTranslated(0, 0.25, -0.25);
@@ -46,7 +64,7 @@ void drawUpperRightArm()
 	glPopMatrix();
 }
 
-void drawLowerLeftArm()
+void drawLowerRightArm()
 {
 	glPushMatrix();
 	glScaled(1.5, 1, 1);
@@ -54,7 +72,7 @@ void drawLowerLeftArm()
 	glPopMatrix();
 }
 
-void drawLowerRightArm()
+void drawLowerLeftArm()
 {
 	glPushMatrix();
 	glScaled(1.5, 1, 1);
@@ -102,20 +120,30 @@ void Keepon::draw()
 
 		// draw the bottom sphere
 		glPushMatrix();
+		glRotated(VAL(TORSO_ROTATE_X), 1, 0, 0);
+		glRotated(VAL(TORSO_ROTATE_Y), 0, 1, 0);
+		glRotated(VAL(TORSO_ROTATE_Z), 0, 0, 1);
 		glTranslated(0.0, 2.0, 0.0);
 		drawTorso();
 
-			// draw the left upper arm
+			// draw the right upper arm
 			glPushMatrix();
 			glTranslated(-1.8, 0.2, 0.0);
-			drawUpperLeftArm();
+			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_X), 1, 0, 0);
+			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Y), 0, 1, 0);
+			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Z), 0, 0, 1);
+			drawUpperRightArm();
 			
-				// draw the left lower arm
+				// draw the right lower arm
 				glPushMatrix();
-				glTranslated(-(2.7 + 0.3), 0, 0);
-				drawLowerLeftArm();
+				glTranslated(-2.7, 0, 0);
+				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_X), 1, 0, 0);
+				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Y), 0, 1, 0);
+				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Z), 0, 0, 1);
+				glTranslated(-0.3, 0, 0);
+				drawLowerRightArm();
 
-					// draw the left weapon
+					// draw the right weapon
 					glPushMatrix();
 					drawWeapon();
 					glPopMatrix();
@@ -123,21 +151,32 @@ void Keepon::draw()
 				glPopMatrix();
 			glPopMatrix();
 
-			// draw the right upper arm
+			// draw the left upper arm
 			glPushMatrix();
 			glTranslated(1.8, 0.2, 0.0);
-			drawUpperRightArm();
+			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_X), 1, 0, 0);
+			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Y), 0, 1, 0);
+			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Z), 0, 0, 1);
+			drawUpperLeftArm();
 
 				glPushMatrix();
-				glTranslated(2.7 + 0.3, 0, 0);
-				drawLowerRightArm();
+				glTranslated(2.7, 0, 0);
+				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_X), 1, 0, 0);
+				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Y), 0, 1, 0);
+				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Z), 0, 0, 1);
+				glTranslated(0.3, 0, 0);
+				// draw the left lower arm
+				drawLowerLeftArm();
 				glPopMatrix();
 			glPopMatrix();
 
 
 			glPushMatrix();
-			glTranslated(0.0, 3.0, 0.0);
-			// draw the upper sphere
+			glTranslated(0.0, 3.0 + VAL(HEADHEIGHT), 0.0);
+			glRotated(VAL(HEAD_ROTATE_X), 1, 0, 0);
+			glRotated(VAL(HEAD_ROTATE_Y), 0, 1, 0);
+			glRotated(VAL(HEAD_ROTATE_Z), 0, 0, 1);
+			// draw the head
 			drawHead();
 
 				glPushMatrix();
@@ -163,11 +202,36 @@ int main()
 	// Constructor is ModelerControl(name, minimumvalue, maximumvalue, 
 	// stepsize, defaultvalue)
 	ModelerControl controls[NUMCONTROLS];
-	controls[XPOS] = ModelerControl("X Position", -5, 5, 0.1f, 0);
-	controls[YPOS] = ModelerControl("Y Position", 0, 5, 0.1f, 0);
-	controls[ZPOS] = ModelerControl("Z Position", -5, 5, 0.1f, 0);
-	controls[HEIGHT] = ModelerControl("Height", 1, 2.5, 0.1f, 1);
-	controls[ROTATE] = ModelerControl("Rotate", -135, 135, 1, 0);
+	controls[XPOS] = ModelerControl("Base X Position", -5, 5, 0.1f, 0);
+	controls[YPOS] = ModelerControl("Base Y Position", 0, 5, 0.1f, 0);
+	controls[ZPOS] = ModelerControl("Base Z Position", -5, 5, 0.1f, 0);
+
+	controls[TORSO_ROTATE_X] = ModelerControl("Base Rotate X", -45, 45, 1, 0);
+	controls[TORSO_ROTATE_Y] = ModelerControl("Base Rotate Y", -180, 180, 1, 0);
+	controls[TORSO_ROTATE_Z] = ModelerControl("Base Rotate Z", -45, 45, 1, 0);
+
+
+	controls[HEAD_ROTATE_X] = ModelerControl("Head Rotate X", -90, 90, 1, 0);
+	controls[HEAD_ROTATE_Y] = ModelerControl("Head Rotate Y", -180, 180, 1, 0);
+	controls[HEAD_ROTATE_Z] = ModelerControl("Head Rotate Z", -90, 90, 1, 0);
+
+	controls[LEFT_UPPER_ARM_ROTATE_X] = ModelerControl("Left Upper Arm X", -90, 90, 1, 0);
+	controls[LEFT_UPPER_ARM_ROTATE_Y] = ModelerControl("Left Upper Arm Y", -90, 90, 1, 0);
+	controls[LEFT_UPPER_ARM_ROTATE_Z] = ModelerControl("Left Upper Arm Z", -90, 90, 1, 0);
+
+	controls[LEFT_LOWER_ARM_ROTATE_X] = ModelerControl("Left Lower Arm X", -90, 90, 1, 0);
+	controls[LEFT_LOWER_ARM_ROTATE_Y] = ModelerControl("Left Lower Arm Y", -90, 90, 1, 0);
+	controls[LEFT_LOWER_ARM_ROTATE_Z] = ModelerControl("Left Lower Arm Z", -90, 90, 1, 0);
+
+	controls[RIGHT_UPPER_ARM_ROTATE_X] = ModelerControl("Right Upper Arm X", -90, 90, 1, 0);
+	controls[RIGHT_UPPER_ARM_ROTATE_Y] = ModelerControl("Right Upper Arm Y", -90, 90, 1, 0);
+	controls[RIGHT_UPPER_ARM_ROTATE_Z] = ModelerControl("Right Upper Arm Z", -90, 90, 1, 0);
+
+	controls[RIGHT_LOWER_ARM_ROTATE_X] = ModelerControl("Right Lower Arm X", -90, 90, 1, 0);
+	controls[RIGHT_LOWER_ARM_ROTATE_Y] = ModelerControl("Right Lower Arm X", -90, 90, 1, 0);
+	controls[RIGHT_LOWER_ARM_ROTATE_Z] = ModelerControl("Right Lower Arm X", -90, 90, 1, 0);
+
+	controls[HEADHEIGHT] = ModelerControl("Head Height", 0, 2.5, 0.1f, 0);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
