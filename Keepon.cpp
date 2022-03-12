@@ -3,6 +3,82 @@
 #include "Keepon.h"
 #include "Keepon.h"
 
+void drawTorso()
+{
+	drawSphere(2);
+}
+
+void drawHead()
+{
+	drawSphere(1.0);
+}
+
+void drawHat()
+{
+	glPushMatrix();
+	drawCylinder(0.03, 1.5, 1.5);
+	glTranslated(0.0, 0.03, 0.0);
+	drawCylinder(1.0, 0.5, 0.5);
+	glRotated(90, 1, 0, 0);
+	glTranslated(0.0, 1.0, 0.0);
+	drawTriangle(0.5, 0.0, 0.0, 0.0, 0.7, 0.0, -0.5, 0.0, 0.0);
+	glRotated(90, 0, 1, 0);
+	drawTriangle(0.5, 0.0, 0.0, 0.0, 0.7, 0.0, -0.5, 0.0, 0.0);
+	glPopMatrix();
+
+}
+
+void drawUpperLeftArm()
+{
+	glPushMatrix();
+	glTranslated(0, 0.25, -0.25);
+	glScaled(-2.7, -0.5, 0.5);
+	drawBox(1, 1, 1);
+	glPopMatrix();
+}
+
+void drawUpperRightArm()
+{
+	glPushMatrix();
+	glTranslated(0, 0.25, -0.25);
+	glScaled(2.7, -0.5, 0.5);
+	drawBox(1, 1, 1);
+	glPopMatrix();
+}
+
+void drawLowerLeftArm()
+{
+	glPushMatrix();
+	glScaled(1.5, 1, 1);
+	drawSphere(0.3);
+	glPopMatrix();
+}
+
+void drawLowerRightArm()
+{
+	glPushMatrix();
+	glScaled(1.5, 1, 1);
+	drawSphere(0.3);
+	glPopMatrix();
+}
+
+void drawWeapon()
+{
+	glPushMatrix();
+	glTranslated(-0.15, 0, -0.15);
+	glScaled(0.3, 3, 0.3);
+	// draw the lower part of the weapon
+	drawBox(1, 1, 1);
+	// go to the top of the lower part
+	glTranslated(0, 1, 0);
+	// scale back to normal
+	glScaled(3.33, 0.33, 3.33);
+	glTranslated(0.15, 0.3, 0.15);
+	glScaled(1, 1.3, 1);
+	drawSphere(0.3);
+	glPopMatrix();
+}
+
 void Keepon::draw()
 {
 	// This call takes care of a lot of the nasty projection 
@@ -27,31 +103,52 @@ void Keepon::draw()
 		// draw the bottom sphere
 		glPushMatrix();
 		glTranslated(0.0, 2.0, 0.0);
-		drawSphere(2);
+		drawTorso();
+
+			// draw the left upper arm
+			glPushMatrix();
+			glTranslated(-1.8, 0.2, 0.0);
+			drawUpperLeftArm();
+			
+				// draw the left lower arm
+				glPushMatrix();
+				glTranslated(-(2.7 + 0.3), 0, 0);
+				drawLowerLeftArm();
+
+					// draw the left weapon
+					glPushMatrix();
+					drawWeapon();
+					glPopMatrix();
+
+				glPopMatrix();
+			glPopMatrix();
+
+			// draw the right upper arm
+			glPushMatrix();
+			glTranslated(1.8, 0.2, 0.0);
+			drawUpperRightArm();
+
+				glPushMatrix();
+				glTranslated(2.7 + 0.3, 0, 0);
+				drawLowerRightArm();
+				glPopMatrix();
+			glPopMatrix();
+
+
+			glPushMatrix();
+			glTranslated(0.0, 3.0, 0.0);
+			// draw the upper sphere
+			drawHead();
+
+				glPushMatrix();
+				glTranslated(0.0, 1.0, 0.0);
+				glRotated(-90.0, 1.0, 0.0, 0.0);
+				// draw the hat
+				drawHat();
+				glPopMatrix();
+
+			glPopMatrix();
 		glPopMatrix();
-
-		// draw a cylinder connecting bottom and upper sphere
-		glPushMatrix();
-		glRotated(-90, 1.0, 0.0, 0.0);
-		//drawCylinder(4.0 + 4.0, 0.1, 0.1);
-		glPopMatrix();
-
-		// draw the upper sphere
-		glPushMatrix();
-		glTranslated(0.0, 5.0, 0.0);
-		drawSphere(1.0);
-		glPopMatrix();
-
-		// draw the hat
-		glPushMatrix();
-		glTranslated(0.0, 6.0, 0.0);
-		glRotated(-90.0, 1.0, 0.0, 0.0);
-		drawCylinder(0.03, 1.5, 1.5);
-		glTranslated(0.0, 0.03, 0.0);
-		drawCylinder(1.0, 0.5, 0.5);
-		glPopMatrix();
-
-
 	glPopMatrix();
 }
 
