@@ -33,7 +33,7 @@ B/W:
 Delete yes/no when appropriate
 
 W dramatic light					yes
-W adjustable LoD					yes/no
+W adjustable LoD					yes
 W your idea 						yes/no
 B texture map						yes/no
 B polygonal faces (triangles)				yes/no 

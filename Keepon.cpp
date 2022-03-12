@@ -18,16 +18,23 @@ void drawHead()
 		glPushMatrix();
 		glRotated(eye_angle, 0, 1, 0);
 		glTranslated(0, 0, 1);
-		// draw left eye
-		drawSphere(0.1);
+		if (VAL(LEVEL_OF_DETAILS) > 4)
+		{
+			// draw left eye
+			drawSphere(0.1);
+		}
 		glPopMatrix();
 
 		glPushMatrix();
 		glRotated(-eye_angle, 0, 1, 0);
 		glTranslated(0, 0, 1);
-		// draw right eye
-		drawSphere(0.1);
+		if (VAL(LEVEL_OF_DETAILS) > 4)
+		{
+			// draw right eye
+			drawSphere(0.1);
+		}
 		glPopMatrix();
+
 	glPopMatrix();
 }
 
@@ -85,15 +92,22 @@ void drawWeapon()
 	glPushMatrix();
 	glTranslated(-0.15, 0, -0.15);
 	glScaled(0.3, 3, 0.3);
-	// draw the lower part of the weapon
-	drawBox(1, 1, 1);
+	if (VAL(LEVEL_OF_DETAILS) > 1)
+	{
+		// draw the lower part of the weapon
+		drawBox(1, 1, 1);
+	}
 	// go to the top of the lower part
 	glTranslated(0, 1, 0);
 	// scale back to normal
 	glScaled(3.33, 0.33, 3.33);
 	glTranslated(0.15, 0.3, 0.15);
 	glScaled(1, 1.3, 1);
-	drawSphere(0.3);
+	if (VAL(LEVEL_OF_DETAILS) > 2)
+	{
+		// draw the upper part of the weapon
+		drawSphere(0.3);
+	}
 	glPopMatrix();
 }
 
@@ -193,8 +207,11 @@ void Keepon::draw()
 				glPushMatrix();
 				glTranslated(0.0, 1.0, 0.0);
 				glRotated(-90.0, 1.0, 0.0, 0.0);
-				// draw the hat
-				drawHat();
+				if (VAL(LEVEL_OF_DETAILS) > 3)
+				{
+					// draw the hat
+					drawHat();
+				}
 				glPopMatrix();
 
 			glPopMatrix();
@@ -295,6 +312,8 @@ int main()
 	controls[YLIGHT] = ModelerControl("Default Light Y Position", -30, 30, 0.1f, 12);
 	controls[ZLIGHT] = ModelerControl("Default Light Z Position", -30, 30, 0.1f, 9);
 	controls[INTENSITY] = ModelerControl("Default Light Intensity", 0, 5, 0.1f, 1.3);
+
+	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 5, 1, 5);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
