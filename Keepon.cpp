@@ -3,6 +3,7 @@
 #include "Keepon.h"
 #include <math.h>
 
+
 void drawTorso()
 {
 	drawSphere(2);
@@ -181,7 +182,7 @@ void Keepon::draw()
 	// Start animation
 	if (ModelerApplication::Instance()->GetAnimating()) {
 		startAnimation();
-		i += 2;
+		circleIndex += 2;
 	}
 	else {
 		endAnimation();
@@ -201,30 +202,30 @@ void Keepon::draw()
 	setAmbientColor(.1f, .1f, .1f);
 	setDiffuseColor(COLOR_GREEN);
 	glPushMatrix();
-	glTranslated(VAL(XPOS) + animatedX, VAL(YPOS) + animatedY, VAL(ZPOS) + animatedZ);
+	glTranslated(VAL(XPOS) + baseAnimatedX, VAL(YPOS) + baseAnimatedY, VAL(ZPOS) + baseAnimatedZ);
 
 		// draw the bottom sphere
 		glPushMatrix();
-		glRotated(VAL(TORSO_ROTATE_X), 1, 0, 0);
-		glRotated(VAL(TORSO_ROTATE_Y), 0, 1, 0);
-		glRotated(VAL(TORSO_ROTATE_Z), 0, 0, 1);
+		glRotated(VAL(TORSO_ROTATE_X) + baseAnimatedRotateX, 1, 0, 0);
+		glRotated(VAL(TORSO_ROTATE_Y) + baseAnimatedRotateY, 0, 1, 0);
+		glRotated(VAL(TORSO_ROTATE_Z) + baseAnimatedRotateZ, 0, 0, 1);
 		glTranslated(0.0, 2.0, 0.0);
 		drawTorso();
 
 			// draw the right upper arm
 			glPushMatrix();
 			glTranslated(-1.8, 0.2, 0.0);
-			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_X), 1, 0, 0);
-			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Y), 0, 1, 0);
-			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Z), 0, 0, 1);
+			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_X) + RUArmAnimatedX, 1, 0, 0);
+			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Y) + RUArmAnimatedY, 0, 1, 0);
+			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Z) + RUArmAnimatedZ, 0, 0, 1);
 			drawUpperRightArm();
 			
 				// draw the right lower arm
 				glPushMatrix();
 				glTranslated(-2.7, 0, 0);
-				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_X), 1, 0, 0);
-				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Y), 0, 1, 0);
-				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Z), 0, 0, 1);
+				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_X) + RLArmAnimatedX, 1, 0, 0);
+				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Y) + RLArmAnimatedY, 0, 1, 0);
+				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Z) + RLArmAnimatedZ, 0, 0, 1);
 				glTranslated(-0.3, 0, 0);
 				drawLowerRightArm();
 
@@ -239,16 +240,16 @@ void Keepon::draw()
 			// draw the left upper arm
 			glPushMatrix();
 			glTranslated(1.8, 0.2, 0.0);
-			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_X), 1, 0, 0);
-			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Y), 0, 1, 0);
-			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Z), 0, 0, 1);
+			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_X) + LUArmAnimatedX, 1, 0, 0);
+			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Y) + LUArmAnimatedY, 0, 1, 0);
+			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Z) + LUArmAnimatedZ, 0, 0, 1);
 			drawUpperLeftArm();
 
 				glPushMatrix();
 				glTranslated(2.7, 0, 0);
-				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_X), 1, 0, 0);
-				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Y), 0, 1, 0);
-				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Z), 0, 0, 1);
+				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_X) + LLArmAnimatedX, 1, 0, 0);
+				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Y) + LLArmAnimatedY, 0, 1, 0);
+				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Z) + LLArmAnimatedZ, 0, 0, 1);
 				glTranslated(0.3, 0, 0);
 				// draw the left lower arm
 				drawLowerLeftArm();
@@ -258,9 +259,9 @@ void Keepon::draw()
 
 			glPushMatrix();
 			glTranslated(0.0, 3.0 + VAL(HEADHEIGHT), 0.0);
-			glRotated(VAL(HEAD_ROTATE_X), 1, 0, 0);
-			glRotated(VAL(HEAD_ROTATE_Y), 0, 1, 0);
-			glRotated(VAL(HEAD_ROTATE_Z), 0, 0, 1);
+			glRotated(VAL(HEAD_ROTATE_X) + headAnimatedX, 1, 0, 0);
+			glRotated(VAL(HEAD_ROTATE_Y) + headAnimatedY, 0, 1, 0);
+			glRotated(VAL(HEAD_ROTATE_Z) + headAnimatedZ, 0, 0, 1);
 			// draw the head
 			drawHead();
 
@@ -274,6 +275,7 @@ void Keepon::draw()
 					drawHatWithTexture();
 				}
 				glRotated(90, 1.0, 0.0, 0.0);
+				glRotated(diamondAnimated, 0.0, 1.0, 0.0);
 				glTranslated(0.0, 2.0, 0.0);
 				drawDiamond();
 				glPopMatrix();
@@ -289,22 +291,111 @@ ModelerView* createKeeponModel(int x, int y, int w, int h, char* label)
 }
 
 
+
+void Keepon::calAnimatedValue(double& value, int min, int max, bool& toMax, bool& toMin) {
+	
+	if (toMax) {
+		value += 0.5;
+		if (value == max) {
+			toMax = false;
+			toMin = true;
+		}
+	}
+	else if (toMin) {
+		value -= 0.5;
+		if (value == min) {
+			toMax = true;
+			toMin = false;
+		}
+	}
+
+}
+
+
 void Keepon::startAnimation() {
 
-	float theta = i * M_PI / 180;
+	// Base and whole body
+	float theta = circleIndex * M_PI / 180;
 	float radius = 2.5;
-	animatedX = cos(theta) * 2;
-	animatedZ = sin(theta) * radius;
+	baseAnimatedX = cos(theta) * 2;
+	baseAnimatedZ = sin(theta) * radius;
+	calAnimatedValue(baseAnimatedRotateX , -5, 5, baseToMax, baseToMin);
+	baseAnimatedRotateY += 0.5;
+	calAnimatedValue(baseAnimatedRotateZ , -5, 5, baseToMax, baseToMin);
+
+	// Head
+	diamondAnimated += 10;
+	//calAnimatedValue(headAnimatedY, -50, 50, headToMax, headToMin);
+	calAnimatedValue(headAnimatedZ, -20, 20, headToMax, headToMin);
+
+	// Left Upper Arm
+	LUArmAnimatedX = 15;
+	LUArmAnimatedZ = 17;
+	calAnimatedValue(LUArmAnimatedY, -90, 0, luHandToMax, luHandToMin);
+
+	// Left Lower Arm
+	LLArmAnimatedX = -90;
+	calAnimatedValue(LLArmAnimatedZ, -90, 0, llHandToMax, llHandToMin);
+
+	// Right Upper Arm
+	RUArmAnimatedX = 90;
+	RUArmAnimatedY = 14;
+	calAnimatedValue(RUArmAnimatedZ, -90, 0, ruHandToMax, ruHandToMin);
+
+	// Right Lower Arm
+	//calAnimatedValue(RLArmAnimatedZ, 0, 90, rlHandToMax, rlHandToMin);
 
 }
 
 // Reset all animated values
 void Keepon::endAnimation() {
-	animatedX = 0.0; 
-	animatedY = 0.0; 
-	animatedZ = 0.0; 
-	animatedAngle = 0.0;
-	i = 0;
+
+	baseAnimatedX = 0.0;
+	baseAnimatedY = 0.0;
+	baseAnimatedZ = 0.0;
+	baseAnimatedRotateX = 0.0;
+	baseAnimatedRotateY = 0.0;
+	baseAnimatedRotateZ = 0.0;
+	circleIndex = 0;
+
+	diamondAnimated = 0.0;
+	headAnimatedX = 0.0;
+	headAnimatedY = 0.0;
+	headAnimatedZ = 0.0;
+
+	LUArmAnimatedX = 0.0;
+	LUArmAnimatedY = 0.0;
+	LUArmAnimatedZ = 0.0;
+
+	LLArmAnimatedX = 0.0;
+	LLArmAnimatedY = 0.0;
+	LLArmAnimatedZ = 0.0;
+
+	RUArmAnimatedX = 0.0;
+	RUArmAnimatedY = 0.0;
+	RUArmAnimatedZ = 0.0;
+
+	RLArmAnimatedX = 0.0;
+	RLArmAnimatedY = 0.0;
+	RLArmAnimatedZ = 0.0;
+
+	baseToMax = true;
+	baseToMin = false;
+
+	headToMax = true;
+	headToMin = false;
+
+	luHandToMax = false;
+	luHandToMin = true;
+
+	llHandToMax = false;
+	llHandToMin = true;
+
+	ruHandToMax = false;
+	ruHandToMin = true;
+
+	rlHandToMax = true;
+	rlHandToMin = false;
 
 }
 
@@ -367,8 +458,8 @@ int main()
 	controls[RIGHT_UPPER_ARM_ROTATE_Z] = ModelerControl("Right Upper Arm Z", -90, 90, 1, 0);
 
 	controls[RIGHT_LOWER_ARM_ROTATE_X] = ModelerControl("Right Lower Arm X", -90, 90, 1, 0);
-	controls[RIGHT_LOWER_ARM_ROTATE_Y] = ModelerControl("Right Lower Arm X", -90, 90, 1, 0);
-	controls[RIGHT_LOWER_ARM_ROTATE_Z] = ModelerControl("Right Lower Arm X", -90, 90, 1, 0);
+	controls[RIGHT_LOWER_ARM_ROTATE_Y] = ModelerControl("Right Lower Arm Y", -90, 90, 1, 0);
+	controls[RIGHT_LOWER_ARM_ROTATE_Z] = ModelerControl("Right Lower Arm Z", -90, 90, 1, 0);
 
 	controls[HEADHEIGHT] = ModelerControl("Head Height", 0, 2.5, 0.1f, 0);
 
