@@ -14,7 +14,7 @@ void drawHead()
 	glPushMatrix();
 	// draw head
 	drawSphere(1.0);
-	
+
 		int eye_angle = 20;
 		glPushMatrix();
 		glRotated(eye_angle, 0, 1, 0);
@@ -34,6 +34,19 @@ void drawHead()
 			// draw right eye
 			drawSphere(0.1);
 		}
+		glPopMatrix();
+
+		glPushMatrix();
+		// draw nose
+		glTranslated(0, -0.3, 1);
+		drawCylinder(VAL(HEADHEIGHT), 0.1, 0.1);
+		glPopMatrix();
+
+		glPushMatrix();
+		// draw neck
+		glTranslated(0, -1, 0);
+		glRotated(90, 1.0, 0.0, 0.0);
+		drawCylinder(VAL(HEADHEIGHT), 0.1, 0.1);
 		glPopMatrix();
 
 	glPopMatrix();
@@ -122,6 +135,36 @@ void drawLowerLeftArm()
 	glPopMatrix();
 }
 
+
+void drawHammer()
+{
+	// const double palmThickness = 0.2;
+	const double hammerThick = 0.2;
+	const double hammerLength = 0.5;
+
+	glPushMatrix();
+
+		glTranslated(-1, 0, -0.5);
+		drawBox(2, 1, 1);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslated(0, 1, 0);
+		glPushMatrix();
+		glTranslated(-VAL(HAMMER_WIDTH) - hammerThick / 2, 0, -0.5);
+		drawBox(hammerThick, hammerLength, 1);
+		glPopMatrix();
+		glPushMatrix();
+		glTranslated(VAL(HAMMER_WIDTH), 0, -0.5);
+		drawBox(hammerThick, hammerLength, 1);
+		glPopMatrix();
+
+	glPopMatrix();
+
+
+}
+
+
 void drawWeapon()
 {
 	glPushMatrix();
@@ -136,15 +179,19 @@ void drawWeapon()
 	glTranslated(0, 1, 0);
 	// scale back to normal
 	glScaled(3.33, 0.33, 3.33);
-	glTranslated(0.15, 0.3, 0.15);
+	glTranslated(0.15, 0.0, 0.15);
 	glScaled(1, 1.3, 1);
 	if (VAL(LEVEL_OF_DETAILS) > 2)
 	{
 		// draw the upper part of the weapon
-		drawSphere(0.3);
+		//drawSphere(0.3);
+		drawHammer();
 	}
 	glPopMatrix();
+
 }
+
+
 
 void drawHatWithTexture()
 {
@@ -262,6 +309,7 @@ void Keepon::draw()
 			glRotated(VAL(HEAD_ROTATE_X) + headAnimatedX, 1, 0, 0);
 			glRotated(VAL(HEAD_ROTATE_Y) + headAnimatedY, 0, 1, 0);
 			glRotated(VAL(HEAD_ROTATE_Z) + headAnimatedZ, 0, 0, 1);
+
 			// draw the head
 			drawHead();
 
@@ -326,7 +374,7 @@ void Keepon::startAnimation() {
 	// Head
 	diamondAnimated += 10;
 	//calAnimatedValue(headAnimatedY, -50, 50, headToMax, headToMin);
-	calAnimatedValue(headAnimatedZ, -20, 20, headToMax, headToMin);
+	calAnimatedValue(headAnimatedZ, -7, 7, headToMax, headToMin);
 
 	// Left Upper Arm
 	LUArmAnimatedX = 15;
@@ -454,6 +502,8 @@ int main()
 	controls[LEFT_LOWER_ARM_ROTATE_X] = ModelerControl("Left Lower Arm X", -90, 90, 1, 0);
 	controls[LEFT_LOWER_ARM_ROTATE_Y] = ModelerControl("Left Lower Arm Y", -90, 90, 1, 0);
 	controls[LEFT_LOWER_ARM_ROTATE_Z] = ModelerControl("Left Lower Arm Z", -90, 90, 1, 0);
+
+	controls[HAMMER_WIDTH] = ModelerControl("Hammer Width", 0, 2.5, 0.1f, 0);
 
 	controls[RIGHT_UPPER_ARM_ROTATE_X] = ModelerControl("Right Upper Arm X", -90, 90, 1, 0);
 	controls[RIGHT_UPPER_ARM_ROTATE_Y] = ModelerControl("Right Upper Arm Y", -90, 90, 1, 0);
