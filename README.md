@@ -25,25 +25,27 @@ HKUST login(s):
 
 Basic requirements: 
 Please state what 2B you implemented to exclude from your B/W scores below
-- [x] 1B Texture map
-- [x] 1B Polygonal faces
+- 1B Texture map
+- 1B Polygonal faces
 
 
 B/W:
 
-- [x] 1W Dramatic light				
-- [x] 1W Adjustable level of details					
-- [] 1W Your idea with another whistle and implement it					
-- [x] 1B Texture map						
-- [x] 1B Polygonal faces (triangles)				
-- [x] 1B Animation
-- [] 1B Individual looking (not just red/green)
-- [] 1B Frame all		 
-- [x] 1B1W The camera up vector for camera twists 	
-- [] 2B New primitives for each	
-- [] 2B L-system		
-- [] 2B Mood cycling			
-- [] 4B Metaballs				
-- [] 8B Goal-oriented motion	
-- [] +4B Joint contraints
+Delete yes/no when appropriate
+
+1W Dramatic light								yes
+1W Adjustable level of details					yes
+1W Your idea another whistle					yes/no
+1B Texture map									yes
+1B Polygonal faces (triangles)					yes
+1B Animation       								yes
+1B Individual looking (not just red/green) 		yes/no
+1B Frame all									yes
+1B1W Camera twist up vector 					yes
+2B New primitives for each 						yes/no
+2B L-system										yes/no
+2B Mood cycling 								yes/no
+4B Metaballs									yes/no
+8B Goal-oriented motion 						yes/no
++4B Joint contraints 							yes/no
 </pre>
