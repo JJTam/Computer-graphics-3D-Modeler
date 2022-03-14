@@ -15,6 +15,7 @@ const float kMouseRotationSensitivity		= 1.0f/90.0f;
 const float kMouseTranslationXSensitivity	= 0.03f;
 const float kMouseTranslationYSensitivity	= 0.03f;
 const float kMouseZoomSensitivity			= 0.08f;
+const float kMouseTwistSensitivity			= 0.03f;
 
 void MakeDiagonal(Mat4f &m, float k)
 {
@@ -70,6 +71,16 @@ void MakeHRotZ(Mat4f &m, float theta)
 	m[1][1] = cosTheta;
 }
 
+void MakeVRotZ(Vec3f& v, float theta)
+{
+	float cosTheta = cos(theta);
+	float sinTheta = sin(theta);
+	float newX = cosTheta * v[0] - sinTheta * v[1];
+	float newY = sinTheta * v[0] + cosTheta * v[1];
+	v[0] = newX;
+	v[1] = newY;
+}
+
 
 void Camera::calculateViewingTransformParameters() 
 {
@@ -92,9 +103,11 @@ void Camera::calculateViewingTransformParameters()
 	mPosition = originXform * (azimXform * (elevXform * (dollyXform * mPosition)));
 
 	if ( fmod((double)mElevation, 2.0*M_PI) < 3*M_PI/2 && fmod((double)mElevation, 2.0*M_PI) > M_PI/2 )
-		mUpVector= Vec3f(0,-1,0);
+		mUpVector= Vec3f(sin(mTwist), -cos(mTwist), 0);
 	else
-		mUpVector= Vec3f(0,1,0);
+		mUpVector= Vec3f(sin(mTwist), cos(mTwist), 0);
+
+	mUpVector.normalize();
 
 	mDirtyTransform = false;
 }
@@ -159,7 +172,11 @@ void Camera::dragMouse( int x, int y )
 			break;
 		}
 	case kActionTwist:
-		// Not implemented
+		{
+			float dTwist = -mouseDelta[0] * kMouseTwistSensitivity;
+			setTwist(getTwist() + dTwist);
+			break;
+		}
 	default:
 		break;
 	}

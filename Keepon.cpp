@@ -343,7 +343,9 @@ void Keepon::startAnimation() {
 	calAnimatedValue(RUArmAnimatedZ, -90, 0, ruHandToMax, ruHandToMin);
 
 	// Right Lower Arm
-	//calAnimatedValue(RLArmAnimatedZ, 0, 90, rlHandToMax, rlHandToMin);
+	RLArmAnimatedX += 10.5;
+	//calAnimatedValue(RLArmAnimatedZ, 10, 90, ruHandToMax, ruHandToMin);
+
 
 }
 
@@ -394,8 +396,8 @@ void Keepon::endAnimation() {
 	ruHandToMax = false;
 	ruHandToMin = true;
 
-	rlHandToMax = true;
-	rlHandToMin = false;
+	rlHandToMax = false;
+	rlHandToMin = true;
 
 }
 

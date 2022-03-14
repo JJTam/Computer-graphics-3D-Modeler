@@ -80,8 +80,8 @@ private:
 			ruHandToMax = false,
 			ruHandToMin = true,
 
-			rlHandToMax = true,
-			rlHandToMin = false;
+			rlHandToMax = false,
+			rlHandToMin = true;
 
 
 	// add others here
