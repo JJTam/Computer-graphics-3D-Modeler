@@ -218,6 +218,16 @@ void drawHatWithTexture()
 
 }
 
+void drawLeftLeg()
+{
+	drawBox(0.5, -1.7, 0.5);
+}
+
+void drawRightLeg()
+{
+	drawBox(0.5, -1.7, 0.5);
+}
+
 
 void Keepon::draw()
 {
@@ -256,8 +266,26 @@ void Keepon::draw()
 		glRotated(VAL(TORSO_ROTATE_X) + baseAnimatedRotateX, 1, 0, 0);
 		glRotated(VAL(TORSO_ROTATE_Y) + baseAnimatedRotateY, 0, 1, 0);
 		glRotated(VAL(TORSO_ROTATE_Z) + baseAnimatedRotateZ, 0, 0, 1);
-		glTranslated(0.0, 2.0, 0.0);
+		glTranslated(0.0, 2.0 + 1.5, 0.0);				// radius of torso + length of leg 
 		drawTorso();
+
+			// draw the left leg
+			glPushMatrix();
+			glTranslated(0.3, -1.8, -.3);
+			glRotated(VAL(LEFT_LEG_ROTATE_X), 1, 0, 0);
+			glRotated(VAL(LEFT_LEG_ROTATE_Y), 0, 1, 0);
+			glRotated(VAL(LEFT_LEG_ROTATE_Z), 0, 0, 1);
+			drawLeftLeg();
+			glPopMatrix();
+
+			// draw the right leg
+			glPushMatrix();
+			glTranslated(-(0.3 + 0.5), -1.8, -0.3);
+			glRotated(VAL(RIGHT_LEG_ROTATE_X), 1, 0, 0);
+			glRotated(VAL(RIGHT_LEG_ROTATE_Y), 0, 1, 0);
+			glRotated(VAL(RIGHT_LEG_ROTATE_Z), 0, 0,1);
+			drawRightLeg();
+			glPopMatrix();
 
 			// draw the right upper arm
 			glPushMatrix();
@@ -512,6 +540,14 @@ int main()
 	controls[RIGHT_LOWER_ARM_ROTATE_X] = ModelerControl("Right Lower Arm X", -90, 90, 1, 0);
 	controls[RIGHT_LOWER_ARM_ROTATE_Y] = ModelerControl("Right Lower Arm Y", -90, 90, 1, 0);
 	controls[RIGHT_LOWER_ARM_ROTATE_Z] = ModelerControl("Right Lower Arm Z", -90, 90, 1, 0);
+
+	controls[LEFT_LEG_ROTATE_X] = ModelerControl("Left Leg X", -90, 90, 1, 0);
+	controls[LEFT_LEG_ROTATE_Y] = ModelerControl("Left Leg Y", -90, 90, 1, 0);
+	controls[LEFT_LEG_ROTATE_Z] = ModelerControl("Left Leg Z", -90, 90, 1, 0);
+
+	controls[RIGHT_LEG_ROTATE_X] = ModelerControl("Right Leg X", -90, 90, 1, 0);
+	controls[RIGHT_LEG_ROTATE_Y] = ModelerControl("Right Leg Y", -90, 90, 1, 0);
+	controls[RIGHT_LEG_ROTATE_Z] = ModelerControl("Right Leg Z", -90, 90, 1, 0);
 
 	controls[HEADHEIGHT] = ModelerControl("Head Height", 0, 2.5, 0.1f, 0);
 
