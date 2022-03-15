@@ -40,7 +40,7 @@ Delete yes/no when appropriate
 1B Texture map						yes
 1B Polygonal faces (triangles)				yes
 1B Animation       					yes
-1B Individual looking (not just red/green) 		yes/no
+1B Individual looking (not just red/green) 		yes
 1B Frame all						yes
 1B1W Camera twist up vector 				yes
 2B New type of primitives 				yes/no

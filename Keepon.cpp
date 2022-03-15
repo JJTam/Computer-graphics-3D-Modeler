@@ -6,7 +6,9 @@
 
 void drawTorso()
 {
+	setDiffuseColor(VAL(INDIVIDUAL_LOOKING_TORSO_COLOR_RED) / 255, VAL(INDIVIDUAL_LOOKING_TORSO_COLOR_GREEN) /255, VAL(INDIVIDUAL_LOOKING_TORSO_COLOR_BLUE) / 255);
 	drawSphere(2);
+	setDiffuseColor(COLOR_GREEN);
 }
 
 void drawHead()
@@ -22,7 +24,7 @@ void drawHead()
 		if (VAL(LEVEL_OF_DETAILS) > 4)
 		{
 			// draw left eye
-			drawSphere(0.1);
+			drawSphere(VAL(INDIVIDUAL_LOOKING_EYE_SIZE));
 		}
 		glPopMatrix();
 
@@ -32,14 +34,14 @@ void drawHead()
 		if (VAL(LEVEL_OF_DETAILS) > 4)
 		{
 			// draw right eye
-			drawSphere(0.1);
+			drawSphere(VAL(INDIVIDUAL_LOOKING_EYE_SIZE));
 		}
 		glPopMatrix();
 
 		glPushMatrix();
 		// draw nose
 		glTranslated(0, -0.3, 1);
-		drawCylinder(VAL(HEADHEIGHT), 0.1, 0.1);
+		drawCylinder(VAL(INDIVIDUAL_LOOKING_NOSE_LENGTH), 0.1, 0.1);
 		glPopMatrix();
 
 		glPushMatrix();
@@ -87,6 +89,7 @@ void drawDiamond()
 	//triangle DFA
 	setDiffuseColor(COLOR_RED);
 	drawTriangle(0, 0, -1, 0, 1, 0, 1, 0, 0);
+	setDiffuseColor(COLOR_GREEN);
 }
 
 void drawHat()
@@ -184,8 +187,19 @@ void drawWeapon()
 	if (VAL(LEVEL_OF_DETAILS) > 2)
 	{
 		// draw the upper part of the weapon
-		//drawSphere(0.3);
-		drawHammer();
+		if (VAL(INDIVIDUAL_LOOKING_CHOICE_OF_WEAPON) == 1)
+		{
+			drawHammer();
+		}
+		else if (VAL(INDIVIDUAL_LOOKING_CHOICE_OF_WEAPON) == 2)
+		{
+			drawSphere(0.3);
+		}
+		else
+		{
+			glTranslated(0.0, 0.76, 0.0);
+			drawDiamond();
+		}
 	}
 	glPopMatrix();
 
@@ -555,6 +569,13 @@ int main()
 	controls[YLIGHT] = ModelerControl("Default Light Y Position", -30, 30, 0.1f, 12);
 	controls[ZLIGHT] = ModelerControl("Default Light Z Position", -30, 30, 0.1f, 9);
 	controls[INTENSITY] = ModelerControl("Default Light Intensity", 0, 5, 0.1f, 1.3);
+
+	controls[INDIVIDUAL_LOOKING_NOSE_LENGTH] = ModelerControl("Individual Looking Nose Length", 0.1, 2, 0.1, 0.1);
+	controls[INDIVIDUAL_LOOKING_CHOICE_OF_WEAPON] = ModelerControl("Individual Looking Choice of Weapon", 1, 3, 1, 1);
+	controls[INDIVIDUAL_LOOKING_EYE_SIZE] = ModelerControl("Individual Looking Eye Size", 0.1, 0.3, 0.02, 0.1);
+	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_RED] = ModelerControl("Individual Looking Torso Color Red", 0, 255, 1, 0);
+	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_GREEN] = ModelerControl("Individual Looking Torso Color Green", 0, 255, 1, 255);
+	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_BLUE] = ModelerControl("Individual Looking Torso Color Blue", 0, 255, 1, 0);
 
 	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 5, 1, 5);
 
