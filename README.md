@@ -44,7 +44,7 @@ Delete yes/no when appropriate
 1B Frame all						yes
 1B1W Camera twist up vector 				yes
 2B New type of primitives 				yes/no
-2B L-system						yes/no
+2B L-system						yes
 2B Mood cycling 					yes/no
 4B Metaballs						yes/no
 8B Goal-oriented motion 				yes/no

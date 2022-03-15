@@ -269,110 +269,124 @@ void Keepon::draw()
 	drawBox(10, 0.01f, 10);
 	glPopMatrix();
 
-	// draw the sample model
-	setAmbientColor(.1f, .1f, .1f);
-	setDiffuseColor(COLOR_GREEN);
-	glPushMatrix();
-	glTranslated(VAL(XPOS) + baseAnimatedX, VAL(YPOS) + baseAnimatedY, VAL(ZPOS) + baseAnimatedZ);
 
-		// draw the bottom sphere
-		glPushMatrix();
-		glRotated(VAL(TORSO_ROTATE_X) + baseAnimatedRotateX, 1, 0, 0);
-		glRotated(VAL(TORSO_ROTATE_Y) + baseAnimatedRotateY, 0, 1, 0);
-		glRotated(VAL(TORSO_ROTATE_Z) + baseAnimatedRotateZ, 0, 0, 1);
-		glTranslated(0.0, 2.0 + 1.5, 0.0);				// radius of torso + length of leg 
-		drawTorso();
-
-			// draw the left leg
+		if (VAL(L_SYSTEM_TREE_ON))
+		{
+			setDiffuseColor(COLOR_GREEN);
+			LSystemTree tree(VAL(L_SYSTEM_TREE_LENGTH), VAL(L_SYSTEM_TREE_THICKNESS), VAL(L_SYSTEM_TREE_ANGLE), VAL(L_SYSTEM_TREE_LEVEL));
 			glPushMatrix();
-			glTranslated(0.3, -1.8, -.3);
-			glRotated(VAL(LEFT_LEG_ROTATE_X), 1, 0, 0);
-			glRotated(VAL(LEFT_LEG_ROTATE_Y), 0, 1, 0);
-			glRotated(VAL(LEFT_LEG_ROTATE_Z), 0, 0, 1);
-			drawLeftLeg();
+			tree.draw();
 			glPopMatrix();
+		}
+		else
+		{
+			// draw the original model
 
-			// draw the right leg
+			// draw the sample model
+			setAmbientColor(.1f, .1f, .1f);
+			setDiffuseColor(COLOR_GREEN);
 			glPushMatrix();
-			glTranslated(-(0.3 + 0.5), -1.8, -0.3);
-			glRotated(VAL(RIGHT_LEG_ROTATE_X), 1, 0, 0);
-			glRotated(VAL(RIGHT_LEG_ROTATE_Y), 0, 1, 0);
-			glRotated(VAL(RIGHT_LEG_ROTATE_Z), 0, 0,1);
-			drawRightLeg();
-			glPopMatrix();
+			glTranslated(VAL(XPOS) + baseAnimatedX, VAL(YPOS) + baseAnimatedY, VAL(ZPOS) + baseAnimatedZ);
 
-			// draw the right upper arm
-			glPushMatrix();
-			glTranslated(-1.8, 0.2, 0.0);
-			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_X) + RUArmAnimatedX, 1, 0, 0);
-			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Y) + RUArmAnimatedY, 0, 1, 0);
-			glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Z) + RUArmAnimatedZ, 0, 0, 1);
-			drawUpperRightArm();
-			
-				// draw the right lower arm
+				// draw the bottom sphere
 				glPushMatrix();
-				glTranslated(-2.7, 0, 0);
-				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_X) + RLArmAnimatedX, 1, 0, 0);
-				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Y) + RLArmAnimatedY, 0, 1, 0);
-				glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Z) + RLArmAnimatedZ, 0, 0, 1);
-				glTranslated(-0.3, 0, 0);
-				drawLowerRightArm();
+				glRotated(VAL(TORSO_ROTATE_X) + baseAnimatedRotateX, 1, 0, 0);
+				glRotated(VAL(TORSO_ROTATE_Y) + baseAnimatedRotateY, 0, 1, 0);
+				glRotated(VAL(TORSO_ROTATE_Z) + baseAnimatedRotateZ, 0, 0, 1);
+				glTranslated(0.0, 2.0 + 1.5, 0.0);				// radius of torso + length of leg 
+				drawTorso();
 
-					// draw the right weapon
+					// draw the left leg
 					glPushMatrix();
-					drawWeapon();
+					glTranslated(0.3, -1.8, -.3);
+					glRotated(VAL(LEFT_LEG_ROTATE_X), 1, 0, 0);
+					glRotated(VAL(LEFT_LEG_ROTATE_Y), 0, 1, 0);
+					glRotated(VAL(LEFT_LEG_ROTATE_Z), 0, 0, 1);
+					drawLeftLeg();
 					glPopMatrix();
 
+					// draw the right leg
+					glPushMatrix();
+					glTranslated(-(0.3 + 0.5), -1.8, -0.3);
+					glRotated(VAL(RIGHT_LEG_ROTATE_X), 1, 0, 0);
+					glRotated(VAL(RIGHT_LEG_ROTATE_Y), 0, 1, 0);
+					glRotated(VAL(RIGHT_LEG_ROTATE_Z), 0, 0,1);
+					drawRightLeg();
+					glPopMatrix();
+
+					// draw the right upper arm
+					glPushMatrix();
+					glTranslated(-1.8, 0.2, 0.0);
+					glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_X) + RUArmAnimatedX, 1, 0, 0);
+					glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Y) + RUArmAnimatedY, 0, 1, 0);
+					glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Z) + RUArmAnimatedZ, 0, 0, 1);
+					drawUpperRightArm();
+			
+						// draw the right lower arm
+						glPushMatrix();
+						glTranslated(-2.7, 0, 0);
+						glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_X) + RLArmAnimatedX, 1, 0, 0);
+						glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Y) + RLArmAnimatedY, 0, 1, 0);
+						glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Z) + RLArmAnimatedZ, 0, 0, 1);
+						glTranslated(-0.3, 0, 0);
+						drawLowerRightArm();
+
+							// draw the right weapon
+							glPushMatrix();
+							drawWeapon();
+							glPopMatrix();
+
+						glPopMatrix();
+					glPopMatrix();
+
+					// draw the left upper arm
+					glPushMatrix();
+					glTranslated(1.8, 0.2, 0.0);
+					glRotated(VAL(LEFT_UPPER_ARM_ROTATE_X) + LUArmAnimatedX, 1, 0, 0);
+					glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Y) + LUArmAnimatedY, 0, 1, 0);
+					glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Z) + LUArmAnimatedZ, 0, 0, 1);
+					drawUpperLeftArm();
+
+						glPushMatrix();
+						glTranslated(2.7, 0, 0);
+						glRotated(VAL(LEFT_LOWER_ARM_ROTATE_X) + LLArmAnimatedX, 1, 0, 0);
+						glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Y) + LLArmAnimatedY, 0, 1, 0);
+						glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Z) + LLArmAnimatedZ, 0, 0, 1);
+						glTranslated(0.3, 0, 0);
+						// draw the left lower arm
+						drawLowerLeftArm();
+						glPopMatrix();
+					glPopMatrix();
+
+
+					glPushMatrix();
+					glTranslated(0.0, 3.0 + VAL(HEADHEIGHT), 0.0);
+					glRotated(VAL(HEAD_ROTATE_X) + headAnimatedX, 1, 0, 0);
+					glRotated(VAL(HEAD_ROTATE_Y) + headAnimatedY, 0, 1, 0);
+					glRotated(VAL(HEAD_ROTATE_Z) + headAnimatedZ, 0, 0, 1);
+
+					// draw the head
+					drawHead();
+
+						glPushMatrix();
+						glTranslated(0.0, 1.0, 0.0);
+						glRotated(-90.0, 1.0, 0.0, 0.0);
+						if (VAL(LEVEL_OF_DETAILS) > 3)
+						{
+							// draw the hat
+							//drawHat();
+							drawHatWithTexture();
+						}
+						glRotated(90, 1.0, 0.0, 0.0);
+						glRotated(diamondAnimated, 0.0, 1.0, 0.0);
+						glTranslated(0.0, 2.0, 0.0);
+						drawDiamond();
+						glPopMatrix();
+
+					glPopMatrix();
 				glPopMatrix();
 			glPopMatrix();
-
-			// draw the left upper arm
-			glPushMatrix();
-			glTranslated(1.8, 0.2, 0.0);
-			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_X) + LUArmAnimatedX, 1, 0, 0);
-			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Y) + LUArmAnimatedY, 0, 1, 0);
-			glRotated(VAL(LEFT_UPPER_ARM_ROTATE_Z) + LUArmAnimatedZ, 0, 0, 1);
-			drawUpperLeftArm();
-
-				glPushMatrix();
-				glTranslated(2.7, 0, 0);
-				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_X) + LLArmAnimatedX, 1, 0, 0);
-				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Y) + LLArmAnimatedY, 0, 1, 0);
-				glRotated(VAL(LEFT_LOWER_ARM_ROTATE_Z) + LLArmAnimatedZ, 0, 0, 1);
-				glTranslated(0.3, 0, 0);
-				// draw the left lower arm
-				drawLowerLeftArm();
-				glPopMatrix();
-			glPopMatrix();
-
-
-			glPushMatrix();
-			glTranslated(0.0, 3.0 + VAL(HEADHEIGHT), 0.0);
-			glRotated(VAL(HEAD_ROTATE_X) + headAnimatedX, 1, 0, 0);
-			glRotated(VAL(HEAD_ROTATE_Y) + headAnimatedY, 0, 1, 0);
-			glRotated(VAL(HEAD_ROTATE_Z) + headAnimatedZ, 0, 0, 1);
-
-			// draw the head
-			drawHead();
-
-				glPushMatrix();
-				glTranslated(0.0, 1.0, 0.0);
-				glRotated(-90.0, 1.0, 0.0, 0.0);
-				if (VAL(LEVEL_OF_DETAILS) > 3)
-				{
-					// draw the hat
-					//drawHat();
-					drawHatWithTexture();
-				}
-				glRotated(90, 1.0, 0.0, 0.0);
-				glRotated(diamondAnimated, 0.0, 1.0, 0.0);
-				glTranslated(0.0, 2.0, 0.0);
-				drawDiamond();
-				glPopMatrix();
-
-			glPopMatrix();
-		glPopMatrix();
-	glPopMatrix();
+		}
 }
 
 ModelerView* createKeeponModel(int x, int y, int w, int h, char* label)
@@ -576,6 +590,12 @@ int main()
 	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_RED] = ModelerControl("Individual Looking Torso Color Red", 0, 255, 1, 0);
 	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_GREEN] = ModelerControl("Individual Looking Torso Color Green", 0, 255, 1, 255);
 	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_BLUE] = ModelerControl("Individual Looking Torso Color Blue", 0, 255, 1, 0);
+
+	controls[L_SYSTEM_TREE_ON] = ModelerControl("L-system ON", 0, 1, 1, 0);
+	controls[L_SYSTEM_TREE_LENGTH] = ModelerControl("L-system Tree Length", 1, 2.0, 0.1, 1);
+	controls[L_SYSTEM_TREE_THICKNESS] = ModelerControl("L-system Tree Thickness", 0.2, 0.5, 0.1, 0.2);
+	controls[L_SYSTEM_TREE_ANGLE] = ModelerControl("L-system Tree Angle", 30, 60, 1, 30);
+	controls[L_SYSTEM_TREE_LEVEL] = ModelerControl("L-system Tree Level", 0, 5, 1, 3);
 
 	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 5, 1, 5);
 
