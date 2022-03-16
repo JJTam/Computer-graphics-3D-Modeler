@@ -275,6 +275,7 @@ void Keepon::draw()
 			setDiffuseColor(COLOR_GREEN);
 			LSystemTree tree(VAL(L_SYSTEM_TREE_LENGTH), VAL(L_SYSTEM_TREE_THICKNESS), VAL(L_SYSTEM_TREE_ANGLE), VAL(L_SYSTEM_TREE_LEVEL));
 			glPushMatrix();
+			glTranslated(VAL(XPOS) + baseAnimatedX, VAL(YPOS) + baseAnimatedY, VAL(ZPOS) + baseAnimatedZ);
 			tree.draw();
 			glPopMatrix();
 		}
@@ -299,7 +300,7 @@ void Keepon::draw()
 					// draw the left leg
 					glPushMatrix();
 					glTranslated(0.3, -1.8, -.3);
-					glRotated(VAL(LEFT_LEG_ROTATE_X), 1, 0, 0);
+					glRotated(VAL(LEFT_LEG_ROTATE_X) + LLegAnimatedX, 1, 0, 0);
 					glRotated(VAL(LEFT_LEG_ROTATE_Y), 0, 1, 0);
 					glRotated(VAL(LEFT_LEG_ROTATE_Z), 0, 0, 1);
 					drawLeftLeg();
@@ -308,7 +309,7 @@ void Keepon::draw()
 					// draw the right leg
 					glPushMatrix();
 					glTranslated(-(0.3 + 0.5), -1.8, -0.3);
-					glRotated(VAL(RIGHT_LEG_ROTATE_X), 1, 0, 0);
+					glRotated(VAL(RIGHT_LEG_ROTATE_X) + RLegAnimatedX, 1, 0, 0);
 					glRotated(VAL(RIGHT_LEG_ROTATE_Y), 0, 1, 0);
 					glRotated(VAL(RIGHT_LEG_ROTATE_Z), 0, 0,1);
 					drawRightLeg();
@@ -450,6 +451,11 @@ void Keepon::startAnimation() {
 	RLArmAnimatedX += 10.5;
 	//calAnimatedValue(RLArmAnimatedZ, 10, 90, ruHandToMax, ruHandToMin);
 
+	// Left Leg
+	calAnimatedValue(LLegAnimatedX, -45, 45, lLegToMax, lLegToMin);
+
+	// Right Leg
+	calAnimatedValue(RLegAnimatedX, -45, 45, rlegToMax, rlegToMin);
 
 }
 
@@ -485,6 +491,9 @@ void Keepon::endAnimation() {
 	RLArmAnimatedY = 0.0;
 	RLArmAnimatedZ = 0.0;
 
+	LLegAnimatedX = 0.0;
+	RLegAnimatedX = 0.0;
+
 	baseToMax = true;
 	baseToMin = false;
 
@@ -502,6 +511,12 @@ void Keepon::endAnimation() {
 
 	rlHandToMax = false;
 	rlHandToMin = true;
+
+	lLegToMax = false;
+	lLegToMin = true;
+
+	rlegToMax = true;
+	rlegToMin = false;
 
 }
 
