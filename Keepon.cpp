@@ -242,6 +242,39 @@ void drawRightLeg()
 	drawBox(0.5, -1.7, 0.5);
 }
 
+//reference:	https://en.wikipedia.org/wiki/Torus
+//				http://glprogramming.com/red/chapter07.html
+
+// draw a torus in the xz-plane
+// x = ( R + r * cos(angle1) ) * cos(angle2)
+// y = ( R + r * cos(angle1) ) * sin(angle2)
+// z = r * sin(angle1)
+// angle 1 and angle 2 are angles which make a full circle, so their values start and end at the same point,
+// R is the distance from the center of the tube to the center of the torus,
+// r is the radius of the tube.
+void drawTorus(int numc, int numt, double R, double r)
+{
+	int i, j, k;
+	double s, t, x, y, z, twopi;
+	
+	setDiffuseColor(COLOR_GREEN);
+
+	for (i = 0; i < numc; i++) {
+		glBegin(GL_QUAD_STRIP);
+		for (j = 0; j <= numt; j++) {
+			for (k = 1; k >= 0; k--) {
+				s = (i + k) % numc + 0.5;
+				t = j % numt;
+
+				x = (R + r * cos(s * 2 * M_PI / numc)) * cos(t * 2 * M_PI / numt);
+				y = (R + r * cos(s * 2 * M_PI / numc)) * sin(t * 2 * M_PI / numt);
+				z = r * sin(s * 2 * M_PI / numc);
+				glVertex3f(x, y, z);
+			}
+		}
+		glEnd();
+	}
+}
 
 void Keepon::draw()
 {
@@ -381,6 +414,13 @@ void Keepon::draw()
 						glRotated(diamondAnimated, 0.0, 1.0, 0.0);
 						glTranslated(0.0, 2.0, 0.0);
 						drawDiamond();
+
+							glPushMatrix();
+							glTranslated(0.0, 1.2, 0);
+							glRotated(90, 1, 0, 0);
+							drawTorus(50, 50, 1.3, 0.3);
+							glPopMatrix();
+
 						glPopMatrix();
 
 					glPopMatrix();
