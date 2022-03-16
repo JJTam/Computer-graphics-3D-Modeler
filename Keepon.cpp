@@ -388,6 +388,13 @@ void Keepon::draw()
 						glTranslated(0.3, 0, 0);
 						// draw the left lower arm
 						drawLowerLeftArm();
+
+						if (VAL(LEVEL_OF_DETAILS) > 5)
+						{
+							glRotated(diamondAnimated, 0.0, 1.0, 0.0);
+							glTranslated(0.0, 2.0, 0.0);
+							drawDiamond();
+						}
 						glPopMatrix();
 					glPopMatrix();
 
@@ -411,15 +418,21 @@ void Keepon::draw()
 							drawHatWithTexture();
 						}
 						glRotated(90, 1.0, 0.0, 0.0);
-						glRotated(diamondAnimated, 0.0, 1.0, 0.0);
-						glTranslated(0.0, 2.0, 0.0);
-						drawDiamond();
+						//if (VAL(LEVEL_OF_DETAILS)>5)
+						//{
+						//	glRotated(diamondAnimated, 0.0, 1.0, 0.0);
+						//	glTranslated(0.0, 2.0, 0.0);
+						//	drawDiamond();
+						//}
 
+						if (VAL(LEVEL_OF_DETAILS)>6)
+						{
 							glPushMatrix();
-							glTranslated(0.0, 1.2, 0);
-							glRotated(90, 1, 0, 0);
-							drawTorus(50, 50, 1.3, 0.3);
+							glTranslated(0.0, 1.5, 0);
+							glRotated(-90, 1, 0, 0);
+							drawTorus(50, 50, 0.5, 0.2);
 							glPopMatrix();
+						}
 
 						glPopMatrix();
 
@@ -593,11 +606,11 @@ int main()
 
 	controls[LEFT_UPPER_ARM_ROTATE_X] = ModelerControl("Left Upper Arm X", -90, 90, 1, 0);
 	controls[LEFT_UPPER_ARM_ROTATE_Y] = ModelerControl("Left Upper Arm Y", -90, 90, 1, 0);
-	controls[LEFT_UPPER_ARM_ROTATE_Z] = ModelerControl("Left Upper Arm Z", -90, 90, 1, 0);
+	controls[LEFT_UPPER_ARM_ROTATE_Z] = ModelerControl("Left Upper Arm Z", -90, 45, 1, 0);
 
 	controls[LEFT_LOWER_ARM_ROTATE_X] = ModelerControl("Left Lower Arm X", -90, 90, 1, 0);
 	controls[LEFT_LOWER_ARM_ROTATE_Y] = ModelerControl("Left Lower Arm Y", -90, 90, 1, 0);
-	controls[LEFT_LOWER_ARM_ROTATE_Z] = ModelerControl("Left Lower Arm Z", -90, 90, 1, 0);
+	controls[LEFT_LOWER_ARM_ROTATE_Z] = ModelerControl("Left Lower Arm Z", -90, 45, 1, 0);
 
 	controls[HAMMER_WIDTH] = ModelerControl("Hammer Width", 0, 2.5, 0.1f, 0);
 
@@ -637,7 +650,7 @@ int main()
 	controls[L_SYSTEM_TREE_ANGLE] = ModelerControl("L-system Tree Angle", 30, 60, 1, 30);
 	controls[L_SYSTEM_TREE_LEVEL] = ModelerControl("L-system Tree Level", 0, 5, 1, 3);
 
-	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 5, 1, 5);
+	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
