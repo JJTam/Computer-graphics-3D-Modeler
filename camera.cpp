@@ -202,19 +202,18 @@ void Camera::applyViewingTransform() {
 	// Call our lookAt function
 	lookAt(mPosition, mLookAt, mUpVector);
 
+	//printf("mElevation %f ", mElevation);
+	//printf("mAzimuth %f ", mAzimuth);
+	//printf("mTwist %f ", mTwist);
+	//printf("mDolly %f ", mDolly);
 
-	printf("mElevation %f ", mElevation);
-	printf("mAzimuth %f ", mAzimuth);
-	printf("mTwist %f ", mTwist);
-	printf("mDolly %f ", mDolly);
+	//printf("mLookAt X %f ", mLookAt[0]);
+	//printf("mLookAt Y %f ", mLookAt[1]);
+	//printf("mLookAt Z %f ", mLookAt[2]);
 
-	printf("mLookAt X %f ", mLookAt[0]);
-	printf("mLookAt Y %f ", mLookAt[1]);
-	printf("mLookAt Z %f ", mLookAt[2]);
-
-	printf("mPosition X %f ", mPosition[0]);
-	printf("mPosition Y %f ", mPosition[1]);
-	printf("mPosition Z %f ", mPosition[2]);
+	//printf("mPosition X %f ", mPosition[0]);
+	//printf("mPosition Y %f ", mPosition[1]);
+	//printf("mPosition Z %f ", mPosition[2]);
 
 }
 
@@ -251,10 +250,10 @@ void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up) {
 void Camera::frameAll() {
 
 	mDirtyTransform = true;
-	mTwist = 0.0f;
-	mElevation = 7.049853f;
-	mAzimuth = (float)M_PI;
-	mDolly = -29.19991f;
+	//mTwist = 0.0f;
+	//mElevation = 7.049853f;
+	//mAzimuth = (float)M_PI;
+	mDolly = -40.19991f;
 	mLookAt = Vec3f(0.0, 0.0, 0.0);
 	mPosition = Vec3f(0.0, 20.3, 21.0);
 }

@@ -24,6 +24,7 @@ void drawHead()
 		if (VAL(LEVEL_OF_DETAILS) > 4)
 		{
 			// draw left eye
+			setDiffuseColor(COLOR_BLACK);
 			drawSphere(VAL(INDIVIDUAL_LOOKING_EYE_SIZE));
 		}
 		glPopMatrix();
@@ -34,6 +35,7 @@ void drawHead()
 		if (VAL(LEVEL_OF_DETAILS) > 4)
 		{
 			// draw right eye
+			setDiffuseColor(COLOR_BLACK);
 			drawSphere(VAL(INDIVIDUAL_LOOKING_EYE_SIZE));
 		}
 		glPopMatrix();
@@ -41,6 +43,7 @@ void drawHead()
 		glPushMatrix();
 		// draw nose
 		glTranslated(0, -0.3, 1);
+		setDiffuseColor(COLOR_YELLOW);
 		drawCylinder(VAL(INDIVIDUAL_LOOKING_NOSE_LENGTH), 0.1, 0.1);
 		glPopMatrix();
 
@@ -71,7 +74,7 @@ void drawDiamond()
 	setDiffuseColor(COLOR_BLUE);
 	drawTriangle(0, 0, 1, -1, 0, 0, 0, -1, 0);
 	// triangle DCE
-	setDiffuseColor(COLOR_RED);
+	setDiffuseColor(COLOR_YELLOW);
 	drawTriangle(0, 0, -1, -1, 0, 0, 0, -1, 0);
 	// triangle ADE
 	setDiffuseColor(COLOR_GREEN);
@@ -81,7 +84,7 @@ void drawDiamond()
 	setDiffuseColor(COLOR_GREEN);
 	drawTriangle(1, 0, 0, 0, 1, 0, 0, 0, 1);
 	// triangle BFC
-	setDiffuseColor(COLOR_RED);
+	setDiffuseColor(COLOR_YELLOW);
 	drawTriangle(0, 0, 1, 0, 1, 0, -1, 0, 0);
 	// triangle DFC
 	setDiffuseColor(COLOR_BLUE);
@@ -91,6 +94,31 @@ void drawDiamond()
 	drawTriangle(0, 0, -1, 0, 1, 0, 1, 0, 0);
 	setDiffuseColor(COLOR_GREEN);
 }
+
+
+void drawTriangularPyramid(double r) 
+{
+	double x1 = 0, y1 = 0, z1 = 0, x2 = r / 2, y2 = 0, z2 = r * sqrt(3) / 2,
+		x3 = r, y3 = 0, z3 = 0, x4 = r / 2, y4 = r * sqrt(6) / 3, z4 = r * sqrt(3) / 6;
+
+	drawTriangle(x1, y1, z1, x2, y2, z2, x3, y3, z3);
+	drawTriangle(x1, y1, z1, x2, y2, z2, x4, y4, z4);
+	drawTriangle(x1, y1, z1, x3, y3, z3, x4, y4, z4);
+	drawTriangle(x2, y2, z2, x3, y3, z3, x4, y4, z4);
+}
+
+
+
+void drawRectangularPyramid(double r, double h) 
+{
+	drawTriangle(0, 0, 0, 0, 0, r, r, 0, r);
+	drawTriangle(0, 0, 0, r, 0, r, r, 0, 0);
+	drawTriangle(r / 2, h, r / 2, 0, 0, 0, 0, 0, r);
+	drawTriangle(r / 2, h, r / 2, 0, 0, r, r, 0, r);
+	drawTriangle(r / 2, h, r / 2, r, 0, r, r, 0, 0);
+	drawTriangle(r / 2, h, r / 2, r, 0, 0, 0, 0, 0);
+}
+
 
 void drawHat()
 {
@@ -139,14 +167,58 @@ void drawLowerLeftArm()
 }
 
 
+void drawWing(bool drawLeft) 
+{
+	double a = 5 + VAL(INDIVIDUAL_LOOKING_WINGS_SIZE), 
+		   b = 0.75,
+		   h = 1.75,
+		   theta = 90;
+
+	double sinTheta = sin(theta * M_PI / 180);
+	double cosTheta = cos(theta * M_PI / 180);
+
+	if (drawLeft) {
+		// Big backlight
+		drawTriangle(a, 0, 0, 0, h, 0, a, h * VAL(INDIVIDUAL_LOOKING_WINGS_SIZE), 0);
+		// Big tolight
+		drawTriangle(a, 0, 0, a, h * VAL(INDIVIDUAL_LOOKING_WINGS_SIZE), 0, b * cosTheta, h, b * sinTheta);
+	}
+	
+	else {  // draw right
+		// Big backlight
+		a += 0.55;
+		drawTriangle(a, h * VAL(INDIVIDUAL_LOOKING_WINGS_SIZE), 0, a, 0, 0, b * cosTheta, h, b * sinTheta);
+		// Big tolight
+		drawTriangle(0, h, 0, a, 0, 0, a, h * VAL(INDIVIDUAL_LOOKING_WINGS_SIZE), 0);
+	}
+
+	// Small backlight
+	drawTriangle(0, h, 0, a, 0, 0, b * cosTheta, h, b * sinTheta);
+	// Small tolight
+	drawTriangle(0, h, 0, b * cosTheta, h, b * sinTheta, a, h * VAL(INDIVIDUAL_LOOKING_WINGS_SIZE), 0);
+
+
+	/* Not use these
+	*
+	drawTriangle(0, 0, 0, 0, h, 0, a, 0, 0);
+	drawTriangle(b * cosTheta, 0, b * sinTheta, a, 0, 0, b * cosTheta, h, b * sinTheta);
+
+	drawTriangle(0, 0, 0, b * cosTheta, 0, b * sinTheta, 0, h, 0);
+	drawTriangle(b * cosTheta, 0, b * sinTheta, b * cosTheta, h, b * sinTheta, 0, h, 0);
+	*/
+
+}
+
+
 void drawHammer()
 {
 	// const double palmThickness = 0.2;
 	const double hammerThick = 0.2;
 	const double hammerLength = 0.5;
 
-	glPushMatrix();
+	setDiffuseColor(COLOR_BLUE);
 
+	glPushMatrix();
 		glTranslated(-1, 0, -0.5);
 		drawBox(2, 1, 1);
 		glPopMatrix();
@@ -193,7 +265,9 @@ void drawWeapon()
 		}
 		else if (VAL(INDIVIDUAL_LOOKING_CHOICE_OF_WEAPON) == 2)
 		{
-			drawSphere(0.3);
+			glTranslated(0.0, 0.76, 0.0);
+			setDiffuseColor(COLOR_ROSE);
+			drawSphere(0.85);
 		}
 		else
 		{
@@ -265,8 +339,8 @@ void Keepon::draw()
 	setAmbientColor(.1f, .1f, .1f);
 	setDiffuseColor(COLOR_RED);
 	glPushMatrix();
-	glTranslated(-5, 0, -5);
-	drawBox(10, 0.01f, 10);
+	glTranslated(-8, 0, -8);
+	drawBox(16, 0.1f, 16);
 	glPopMatrix();
 
 
@@ -297,49 +371,68 @@ void Keepon::draw()
 				glTranslated(0.0, 2.0 + 1.5, 0.0);				// radius of torso + length of leg 
 				drawTorso();
 
-					// draw the left leg
+				if (VAL(INDIVIDUAL_LOOKING_WINGS)) {
+					// draw the left wing
 					glPushMatrix();
-					glTranslated(0.3, -1.8, -.3);
-					glRotated(VAL(LEFT_LEG_ROTATE_X) + LLegAnimatedX, 1, 0, 0);
-					glRotated(VAL(LEFT_LEG_ROTATE_Y), 0, 1, 0);
-					glRotated(VAL(LEFT_LEG_ROTATE_Z), 0, 0, 1);
-					drawLeftLeg();
+					glTranslated(0.3, -1.0, -1.7);
+					glRotated(70 - VAL(INDIVIDUAL_LOOKING_LEFT_WING_ROTATE), 0, 1, 0);
+					setDiffuseColor(COLOR_YELLOW);
+					drawWing(true);
 					glPopMatrix();
 
-					// draw the right leg
+					// draw the right wing
 					glPushMatrix();
-					glTranslated(-(0.3 + 0.5), -1.8, -0.3);
-					glRotated(VAL(RIGHT_LEG_ROTATE_X) + RLegAnimatedX, 1, 0, 0);
-					glRotated(VAL(RIGHT_LEG_ROTATE_Y), 0, 1, 0);
-					glRotated(VAL(RIGHT_LEG_ROTATE_Z), 0, 0,1);
-					drawRightLeg();
+					glTranslated(-1.23, -1.0, -1.23);
+					glRotated(100 + VAL(INDIVIDUAL_LOOKING_RIGHT_WING_ROTATE), 0, 1, 0);
+					
+					drawWing(false);
 					glPopMatrix();
+				}
 
-					// draw the right upper arm
-					glPushMatrix();
-					glTranslated(-1.8, 0.2, 0.0);
-					glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_X) + RUArmAnimatedX, 1, 0, 0);
-					glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Y) + RUArmAnimatedY, 0, 1, 0);
-					glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Z) + RUArmAnimatedZ, 0, 0, 1);
-					drawUpperRightArm();
+				// draw the left leg
+				glPushMatrix();
+				glTranslated(0.3, -1.8, -0.3);
+				glRotated(VAL(LEFT_LEG_ROTATE_X) + LLegAnimatedX, 1, 0, 0);
+				glRotated(VAL(LEFT_LEG_ROTATE_Y), 0, 1, 0);
+				glRotated(VAL(LEFT_LEG_ROTATE_Z), 0, 0, 1);
+				drawLeftLeg();
+				glPopMatrix();
+
+				// draw the right leg
+				glPushMatrix();
+				glTranslated(-(0.3 + 0.5), -1.8, -0.3);
+				glRotated(VAL(RIGHT_LEG_ROTATE_X) + RLegAnimatedX, 1, 0, 0);
+				glRotated(VAL(RIGHT_LEG_ROTATE_Y), 0, 1, 0);
+				glRotated(VAL(RIGHT_LEG_ROTATE_Z), 0, 0,1);
+				drawRightLeg();
+				glPopMatrix();
+
+				// draw the right upper arm
+				glPushMatrix();
+				glTranslated(-1.8, 0.2, 0.0);
+				glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_X) + RUArmAnimatedX, 1, 0, 0);
+				glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Y) + RUArmAnimatedY, 0, 1, 0);
+				glRotated(VAL(RIGHT_UPPER_ARM_ROTATE_Z) + RUArmAnimatedZ, 0, 0, 1);
+				drawUpperRightArm();
 			
-						// draw the right lower arm
+					// draw the right lower arm
+					glPushMatrix();
+					glTranslated(-2.7, 0, 0);
+					glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_X) + RLArmAnimatedX, 1, 0, 0);
+					glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Y) + RLArmAnimatedY, 0, 1, 0);
+					glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Z) + RLArmAnimatedZ, 0, 0, 1);
+					glTranslated(-0.3, 0, 0);
+					drawLowerRightArm();
+
+						// draw the right weapon
 						glPushMatrix();
-						glTranslated(-2.7, 0, 0);
-						glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_X) + RLArmAnimatedX, 1, 0, 0);
-						glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Y) + RLArmAnimatedY, 0, 1, 0);
-						glRotated(VAL(RIGHT_LOWER_ARM_ROTATE_Z) + RLArmAnimatedZ, 0, 0, 1);
-						glTranslated(-0.3, 0, 0);
-						drawLowerRightArm();
-
-							// draw the right weapon
-							glPushMatrix();
-							drawWeapon();
-							glPopMatrix();
-
+						drawWeapon();
 						glPopMatrix();
-					glPopMatrix();
 
+					glPopMatrix();
+				glPopMatrix();
+
+				setDiffuseColor(COLOR_YELLOW);
 					// draw the left upper arm
 					glPushMatrix();
 					glTranslated(1.8, 0.2, 0.0);
@@ -602,6 +695,10 @@ int main()
 	controls[INDIVIDUAL_LOOKING_NOSE_LENGTH] = ModelerControl("Individual Looking Nose Length", 0.1, 2, 0.1, 0.1);
 	controls[INDIVIDUAL_LOOKING_CHOICE_OF_WEAPON] = ModelerControl("Individual Looking Choice of Weapon", 1, 3, 1, 1);
 	controls[INDIVIDUAL_LOOKING_EYE_SIZE] = ModelerControl("Individual Looking Eye Size", 0.1, 0.3, 0.02, 0.1);
+	controls[INDIVIDUAL_LOOKING_WINGS] = ModelerControl("Individual Looking Wings", 0, 1, 1, 1);
+	controls[INDIVIDUAL_LOOKING_WINGS_SIZE] = ModelerControl("Individual Looking Wings Size", 1, 4, 0.1f, 1);
+	controls[INDIVIDUAL_LOOKING_LEFT_WING_ROTATE] = ModelerControl("Individual Looking Left Wing Rotate", -20, 35, 0.1f, 0);
+	controls[INDIVIDUAL_LOOKING_RIGHT_WING_ROTATE] = ModelerControl("Individual Looking Right Wing Rotate", -20, 35, 0.1f, 0);
 	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_RED] = ModelerControl("Individual Looking Torso Color Red", 0, 255, 1, 0);
 	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_GREEN] = ModelerControl("Individual Looking Torso Color Green", 0, 255, 1, 255);
 	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_BLUE] = ModelerControl("Individual Looking Torso Color Blue", 0, 255, 1, 0);
