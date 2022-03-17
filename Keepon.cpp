@@ -316,6 +316,39 @@ void drawRightLeg()
 	drawBox(0.5, -1.7, 0.5);
 }
 
+//reference:	https://en.wikipedia.org/wiki/Torus
+//				http://glprogramming.com/red/chapter07.html
+
+// draw a torus in the xz-plane
+// x = ( R + r * cos(angle1) ) * cos(angle2)
+// y = ( R + r * cos(angle1) ) * sin(angle2)
+// z = r * sin(angle1)
+// angle 1 and angle 2 are angles which make a full circle, so their values start and end at the same point,
+// R is the distance from the center of the tube to the center of the torus,
+// r is the radius of the tube.
+void drawTorus(int numc, int numt, double R, double r)
+{
+	int i, j, k;
+	double s, t, x, y, z, twopi;
+	
+	setDiffuseColor(COLOR_GREEN);
+
+	for (i = 0; i < numc; i++) {
+		glBegin(GL_QUAD_STRIP);
+		for (j = 0; j <= numt; j++) {
+			for (k = 1; k >= 0; k--) {
+				s = (i + k) % numc + 0.5;
+				t = j % numt;
+
+				x = (R + r * cos(s * 2 * M_PI / numc)) * cos(t * 2 * M_PI / numt);
+				y = (R + r * cos(s * 2 * M_PI / numc)) * sin(t * 2 * M_PI / numt);
+				z = r * sin(s * 2 * M_PI / numc);
+				glVertex3f(x, y, z);
+			}
+		}
+		glEnd();
+	}
+}
 
 void Keepon::draw()
 {
@@ -449,6 +482,13 @@ void Keepon::draw()
 						glTranslated(0.3, 0, 0);
 						// draw the left lower arm
 						drawLowerLeftArm();
+
+						if (VAL(LEVEL_OF_DETAILS) > 5)
+						{
+							glRotated(diamondAnimated, 0.0, 1.0, 0.0);
+							glTranslated(0.0, 2.0, 0.0);
+							drawDiamond();
+						}
 						glPopMatrix();
 					glPopMatrix();
 
@@ -472,9 +512,22 @@ void Keepon::draw()
 							drawHatWithTexture();
 						}
 						glRotated(90, 1.0, 0.0, 0.0);
-						glRotated(diamondAnimated, 0.0, 1.0, 0.0);
-						glTranslated(0.0, 2.0, 0.0);
-						drawDiamond();
+						//if (VAL(LEVEL_OF_DETAILS)>5)
+						//{
+						//	glRotated(diamondAnimated, 0.0, 1.0, 0.0);
+						//	glTranslated(0.0, 2.0, 0.0);
+						//	drawDiamond();
+						//}
+
+						if (VAL(LEVEL_OF_DETAILS)>6)
+						{
+							glPushMatrix();
+							glTranslated(0.0, 1.5, 0);
+							glRotated(-90, 1, 0, 0);
+							drawTorus(50, 50, 0.5, 0.2);
+							glPopMatrix();
+						}
+
 						glPopMatrix();
 
 					glPopMatrix();
@@ -661,11 +714,11 @@ int main()
 
 	controls[LEFT_UPPER_ARM_ROTATE_X] = ModelerControl("Left Upper Arm X", -90, 90, 1, 0);
 	controls[LEFT_UPPER_ARM_ROTATE_Y] = ModelerControl("Left Upper Arm Y", -90, 90, 1, 0);
-	controls[LEFT_UPPER_ARM_ROTATE_Z] = ModelerControl("Left Upper Arm Z", -90, 90, 1, 0);
+	controls[LEFT_UPPER_ARM_ROTATE_Z] = ModelerControl("Left Upper Arm Z", -90, 45, 1, 0);
 
 	controls[LEFT_LOWER_ARM_ROTATE_X] = ModelerControl("Left Lower Arm X", -90, 90, 1, 0);
 	controls[LEFT_LOWER_ARM_ROTATE_Y] = ModelerControl("Left Lower Arm Y", -90, 90, 1, 0);
-	controls[LEFT_LOWER_ARM_ROTATE_Z] = ModelerControl("Left Lower Arm Z", -90, 90, 1, 0);
+	controls[LEFT_LOWER_ARM_ROTATE_Z] = ModelerControl("Left Lower Arm Z", -90, 45, 1, 0);
 
 	controls[HAMMER_WIDTH] = ModelerControl("Hammer Width", 0, 2.5, 0.1f, 0);
 
@@ -709,7 +762,7 @@ int main()
 	controls[L_SYSTEM_TREE_ANGLE] = ModelerControl("L-system Tree Angle", 30, 60, 1, 30);
 	controls[L_SYSTEM_TREE_LEVEL] = ModelerControl("L-system Tree Level", 0, 5, 1, 3);
 
-	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 5, 1, 5);
+	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
