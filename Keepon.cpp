@@ -29,30 +29,30 @@ void drawHead()
 		}
 		glPopMatrix();
 
-		glPushMatrix();
-		glRotated(-eye_angle, 0, 1, 0);
-		glTranslated(0, 0, 1);
-		if (VAL(LEVEL_OF_DETAILS) > 4)
-		{
+
+		if (VAL(LEVEL_OF_DETAILS) > 4) {
+			glPushMatrix();
+			glRotated(-eye_angle, 0, 1, 0);
+			glTranslated(0, 0, 1);
 			// draw right eye
 			setDiffuseColor(COLOR_BLACK);
 			drawSphere(VAL(INDIVIDUAL_LOOKING_EYE_SIZE));
+			glPopMatrix();
+
+			glPushMatrix();
+			// draw nose
+			glTranslated(0, -0.3, 1);
+			setDiffuseColor(COLOR_YELLOW);
+			drawCylinder(VAL(INDIVIDUAL_LOOKING_NOSE_LENGTH), 0.1, 0.1);
+			glPopMatrix();
+
+			glPushMatrix();
+			// draw neck
+			glTranslated(0, -1, 0);
+			glRotated(90, 1.0, 0.0, 0.0);
+			drawCylinder(VAL(HEADHEIGHT), 0.1, 0.1);
+			glPopMatrix();
 		}
-		glPopMatrix();
-
-		glPushMatrix();
-		// draw nose
-		glTranslated(0, -0.3, 1);
-		setDiffuseColor(COLOR_YELLOW);
-		drawCylinder(VAL(INDIVIDUAL_LOOKING_NOSE_LENGTH), 0.1, 0.1);
-		glPopMatrix();
-
-		glPushMatrix();
-		// draw neck
-		glTranslated(0, -1, 0);
-		glRotated(90, 1.0, 0.0, 0.0);
-		drawCylinder(VAL(HEADHEIGHT), 0.1, 0.1);
-		glPopMatrix();
 
 	glPopMatrix();
 }
@@ -242,6 +242,7 @@ void drawHammer()
 
 void drawWeapon()
 {
+	setDiffuseColor(COLOR_GREEN);
 	glPushMatrix();
 	glTranslated(-0.15, 0, -0.15);
 	glScaled(0.3, 3, 0.3);
@@ -331,7 +332,7 @@ void drawTorus(int numc, int numt, double R, double r)
 	int i, j, k;
 	double s, t, x, y, z, twopi;
 	
-	setDiffuseColor(COLOR_GREEN);
+	setDiffuseColor(COLOR_ROSE);
 
 	for (i = 0; i < numc; i++) {
 		glBegin(GL_QUAD_STRIP);
@@ -404,12 +405,13 @@ void Keepon::draw()
 				glTranslated(0.0, 2.0 + 1.5, 0.0);				// radius of torso + length of leg 
 				drawTorso();
 
-				if (VAL(INDIVIDUAL_LOOKING_WINGS)) {
+				if (VAL(INDIVIDUAL_LOOKING_WINGS) && VAL(LEVEL_OF_DETAILS) > 4) {
 					// draw the left wing
+					setDiffuseColor(COLOR_YELLOW);
+
 					glPushMatrix();
 					glTranslated(0.3, -1.0, -1.7);
 					glRotated(70 - VAL(INDIVIDUAL_LOOKING_LEFT_WING_ROTATE), 0, 1, 0);
-					setDiffuseColor(COLOR_YELLOW);
 					drawWing(true);
 					glPopMatrix();
 
@@ -417,7 +419,6 @@ void Keepon::draw()
 					glPushMatrix();
 					glTranslated(-1.23, -1.0, -1.23);
 					glRotated(100 + VAL(INDIVIDUAL_LOOKING_RIGHT_WING_ROTATE), 0, 1, 0);
-					
 					drawWing(false);
 					glPopMatrix();
 				}
@@ -465,7 +466,7 @@ void Keepon::draw()
 					glPopMatrix();
 				glPopMatrix();
 
-				setDiffuseColor(COLOR_YELLOW);
+					setDiffuseColor(COLOR_YELLOW);
 					// draw the left upper arm
 					glPushMatrix();
 					glTranslated(1.8, 0.2, 0.0);
@@ -492,7 +493,7 @@ void Keepon::draw()
 						glPopMatrix();
 					glPopMatrix();
 
-
+					setDiffuseColor(COLOR_YELLOW);
 					glPushMatrix();
 					glTranslated(0.0, 3.0 + VAL(HEADHEIGHT), 0.0);
 					glRotated(VAL(HEAD_ROTATE_X) + headAnimatedX, 1, 0, 0);
@@ -524,7 +525,7 @@ void Keepon::draw()
 							glPushMatrix();
 							glTranslated(0.0, 1.5, 0);
 							glRotated(-90, 1, 0, 0);
-							drawTorus(50, 50, 0.5, 0.2);
+							drawTorus(50, 50, 1, 0.2);
 							glPopMatrix();
 						}
 
@@ -699,6 +700,9 @@ int main()
 	// Constructor is ModelerControl(name, minimumvalue, maximumvalue, 
 	// stepsize, defaultvalue)
 	ModelerControl controls[NUMCONTROLS];
+
+	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
+
 	controls[XPOS] = ModelerControl("Base X Position", -5, 5, 0.1f, 0);
 	controls[YPOS] = ModelerControl("Base Y Position", 0, 5, 0.1f, 0);
 	controls[ZPOS] = ModelerControl("Base Z Position", -5, 5, 0.1f, 0);
@@ -762,7 +766,6 @@ int main()
 	controls[L_SYSTEM_TREE_ANGLE] = ModelerControl("L-system Tree Angle", 30, 60, 1, 30);
 	controls[L_SYSTEM_TREE_LEVEL] = ModelerControl("L-system Tree Level", 0, 5, 1, 3);
 
-	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();

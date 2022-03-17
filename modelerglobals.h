@@ -10,6 +10,9 @@
 // of the controls from the user interface.
 enum SampleModelControls
 {
+
+	LEVEL_OF_DETAILS,
+
 	XPOS,
 	YPOS,
 	ZPOS,
@@ -71,8 +74,6 @@ enum SampleModelControls
 	YLIGHT,
 	ZLIGHT,
 	INTENSITY,
-
-	LEVEL_OF_DETAILS,
 
 	NUMCONTROLS
 };
