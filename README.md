@@ -36,7 +36,7 @@ Delete yes/no when appropriate
 
 1W Dramatic light					yes
 1W Adjustable level of details				yes
-1W Your idea with another whistle			yes/no
+1W Your idea with another whistle			yes
 1B Texture map						yes
 1B Polygonal faces (triangles)				yes
 1B Animation       					yes
