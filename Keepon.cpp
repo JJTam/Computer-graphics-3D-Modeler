@@ -287,7 +287,20 @@ void drawWeapon()
 void drawHatWithTexture()
 {
 	int width, height, nrChannels;
-	unsigned char* data = readBMP("wildf.bmp", width, height);
+	unsigned char* data;
+	
+	if (VAL(TEXTURE_CHOICE) == 1)
+	{
+		data = readBMP("wildf.bmp", width, height);
+	}
+	else if (VAL(TEXTURE_CHOICE) == 2)
+	{
+		data = readBMP("water.bmp", width, height);
+	}
+	else
+	{
+		data = readBMP("babyraptor.bmp", width, height);
+	}
 
 	unsigned int texture;
 	glGenTextures(1, &texture);
@@ -871,6 +884,8 @@ int main()
 	controls[METABALL_DISTANCE_DIFFERENCE] = ModelerControl("MetaBall distance difference", 0.5, 2, 0.1, 1);
 
 	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
+
+	controls[TEXTURE_CHOICE] = ModelerControl("Texture Choice", 1, 3, 1, 1);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();
