@@ -96,6 +96,7 @@ void drawDiamond()
 }
 
 
+// Build a complex shape as a set of polygonal faces, using the "triangle" primitive to render them.
 void drawTriangularPyramid(double r) 
 {
 	double x1 = 0, y1 = 0, z1 = 0, x2 = r / 2, y2 = 0, z2 = r * sqrt(3) / 2,
@@ -108,7 +109,7 @@ void drawTriangularPyramid(double r)
 }
 
 
-
+// Build a complex shape as a set of polygonal faces, using the "triangle" primitive to render them.
 void drawRectangularPyramid(double r, double h) 
 {
 	drawTriangle(0, 0, 0, 0, 0, r, r, 0, r);
@@ -266,9 +267,10 @@ void drawWeapon()
 		}
 		else if (VAL(INDIVIDUAL_LOOKING_CHOICE_OF_WEAPON) == 2)
 		{
-			glTranslated(0.0, 0.76, 0.0);
-			setDiffuseColor(COLOR_ROSE);
-			drawSphere(0.85);
+			glTranslated(-0.75, 0.0, -0.75);
+			setDiffuseColor(COLOR_PURPLE);
+			drawRectangularPyramid(1.5, 2.0);
+			//drawSphere(0.85);
 		}
 		else
 		{
@@ -351,6 +353,7 @@ void drawTorus(int numc, int numt, double R, double r)
 	}
 }
 
+
 void Keepon::draw()
 {
 	// This call takes care of a lot of the nasty projection 
@@ -361,7 +364,16 @@ void Keepon::draw()
 	// Start animation
 	if (ModelerApplication::Instance()->GetAnimating()) {
 		startAnimation();
-		circleIndex += 2;
+		
+		if (VAL(ANIMATION_HAPPY_MOOD) == 1) {
+			circleSpeed += 3.0;
+		}
+		else if (VAL(ANIMATION_ANGRY_MOOD) == 1) {
+			circleSpeed += 2.25;
+		}
+		else {
+			circleSpeed += 1.25;
+		}
 	}
 	else {
 		endAnimation();
@@ -411,14 +423,14 @@ void Keepon::draw()
 
 					glPushMatrix();
 					glTranslated(0.3, -1.0, -1.7);
-					glRotated(70 - VAL(INDIVIDUAL_LOOKING_LEFT_WING_ROTATE), 0, 1, 0);
+					glRotated(70 - VAL(INDIVIDUAL_LOOKING_LEFT_WING_ROTATE) - LWingAnimated, 0, 1, 0);
 					drawWing(true);
 					glPopMatrix();
 
 					// draw the right wing
 					glPushMatrix();
 					glTranslated(-1.23, -1.0, -1.23);
-					glRotated(100 + VAL(INDIVIDUAL_LOOKING_RIGHT_WING_ROTATE), 0, 1, 0);
+					glRotated(100 + VAL(INDIVIDUAL_LOOKING_RIGHT_WING_ROTATE) + RWingAnimated, 0, 1, 0);
 					drawWing(false);
 					glPopMatrix();
 				}
@@ -484,11 +496,24 @@ void Keepon::draw()
 						// draw the left lower arm
 						drawLowerLeftArm();
 
-						if (VAL(LEVEL_OF_DETAILS) > 5)
-						{
-							glRotated(diamondAnimated, 0.0, 1.0, 0.0);
-							glTranslated(0.0, 2.0, 0.0);
-							drawDiamond();
+						if (VAL(LEVEL_OF_DETAILS) > 5) {
+			
+							if (VAL(INDIVIDUAL_LOOKING_CHOICE_OF_DIAMOND) == 1) {
+								glRotated(diamondAnimated, 0.0, 1.0, 0.0);
+								glTranslated(0.0, 2.0, 0.0);
+								drawDiamond();
+							}
+							else if (VAL(INDIVIDUAL_LOOKING_CHOICE_OF_DIAMOND) == 2) {
+								glRotated(diamondAnimated, 2.0, 0.0, 0.0);
+								glTranslated(-1.0, 1.0, -1.0);
+								setDiffuseColor(COLOR_BLUE);
+								drawTriangularPyramid(2.0);
+							}
+							else {
+								glRotated(diamondAnimated, 0.0, 2.0, 1.0);
+								glTranslated(-1.0, 1.0, -1.0);
+								drawRectangularPyramid(2.0, 2.5);
+							}
 						}
 						glPopMatrix();
 					glPopMatrix();
@@ -544,18 +569,18 @@ ModelerView* createKeeponModel(int x, int y, int w, int h, char* label)
 
 
 
-void Keepon::calAnimatedValue(double& value, int min, int max, bool& toMax, bool& toMin) {
+void Keepon::setAnimatedValue(double& value, double step, double min, double max, bool& toMax, bool& toMin) {
 	
 	if (toMax) {
-		value += 0.5;
-		if (value == max) {
+		value += step;
+		if (value >= max) {
 			toMax = false;
 			toMin = true;
 		}
 	}
 	else if (toMin) {
-		value -= 0.5;
-		if (value == min) {
+		value -= step;
+		if (value <= min) {
 			toMax = true;
 			toMin = false;
 		}
@@ -567,47 +592,95 @@ void Keepon::calAnimatedValue(double& value, int min, int max, bool& toMax, bool
 void Keepon::startAnimation() {
 
 	// Base and whole body
-	float theta = circleIndex * M_PI / 180;
-	float radius = 2.5;
-	baseAnimatedX = cos(theta) * 2;
-	baseAnimatedZ = sin(theta) * radius;
-	calAnimatedValue(baseAnimatedRotateX , -5, 5, baseToMax, baseToMin);
-	baseAnimatedRotateY += 0.5;
-	calAnimatedValue(baseAnimatedRotateZ , -5, 5, baseToMax, baseToMin);
+	float theta = circleSpeed * M_PI / 180;
+	float radius = 5.5;
+	baseAnimatedX = (GLdouble)cos(theta) * 2;
+	baseAnimatedZ = (GLdouble)sin(theta) * radius;
 
-	// Head
-	diamondAnimated += 10;
-	//calAnimatedValue(headAnimatedY, -50, 50, headToMax, headToMin);
-	calAnimatedValue(headAnimatedZ, -7, 7, headToMax, headToMin);
+	if (VAL(ANIMATION_HAPPY_MOOD) == 1) {
+		// Base and whole body
+		setAnimatedValue(baseAnimatedY, 0.2, 0, 5, baseToMax, baseToMin);
 
-	// Left Upper Arm
-	LUArmAnimatedX = 15;
-	LUArmAnimatedZ = 17;
-	calAnimatedValue(LUArmAnimatedY, -90, 0, luHandToMax, luHandToMin);
+		// Head
+		headAnimatedY = 0;
+
+		if (baseAnimatedY > 3.5) {
+			SVAL(INDIVIDUAL_LOOKING_NOSE_LENGTH, 2.0);
+		}
+		else {
+			SVAL(INDIVIDUAL_LOOKING_NOSE_LENGTH, 0.1);
+		}
+		setAnimatedValue(headAnimatedZ, 0.55, -13.0, 13.0, headToMax, headToMin);
+
+		// Wings
+		setAnimatedValue(LWingAnimated, 5.05, -10.0, 50.0, lWingToMax, lWingToMin);
+		setAnimatedValue(RWingAnimated, 5.05, -10.0, 50.0, rWingToMax, rWingToMin);
+
+		// Left upper arm 
+		setAnimatedValue(LUArmAnimatedY, 0.75, -80.0, 0.0, luHandToMax, luHandToMin);
+
+		// Right Upper Arm
+		// Right Lower Arm (weapon)
+		RUArmAnimatedX = 90;
+		RUArmAnimatedY = 14;
+		RLArmAnimatedX += 10.5;
+		setAnimatedValue(RUArmAnimatedZ, 0.55, -90, 0, ruHandToMax, ruHandToMin);
+	}
+	else if (VAL(ANIMATION_ANGRY_MOOD) == 1) {
+		// Base
+		setAnimatedValue(baseAnimatedRotateX , 0.4, -5.0, 5.0, baseToMax, baseToMin);
+		baseAnimatedRotateY += 0.5;
+		setAnimatedValue(baseAnimatedRotateZ , 0.3, -5.0, 5.0, baseToMax, baseToMin);
+
+		// Head
+		setAnimatedValue(headAnimatedY, 0.6, -17.0, 17.0, headToMax, headToMin);
+
+		// Wings
+		setAnimatedValue(LWingAnimated, 0.45, 0.0, 25.0, lWingToMax, lWingToMin);
+		setAnimatedValue(RWingAnimated, 0.45, 0.0, 25.0, rWingToMax, rWingToMin);
+
+		// Right Upper Arm
+		// Right Lower Arm (weapon)
+		RUArmAnimatedZ = -90;
+		RUArmAnimatedY = 90;
+		setAnimatedValue(RUArmAnimatedX, 3.5, 10.0, 90.0, ruHandToMax, ruHandToMin);
+	}
+	else {
+		// Head
+		setAnimatedValue(headAnimatedY, 0.6, -90.0, 0.0, headToMax, headToMin);
+
+		// Wings
+		LWingAnimated = 0.0;
+		RWingAnimated = 0.0;
+
+		// Right Upper Arm
+		// Right Lower Arm (weapon)
+		RUArmAnimatedX = 90;
+		RUArmAnimatedY = 14;
+		setAnimatedValue(RUArmAnimatedZ, 0.55, -90, 0, ruHandToMax, ruHandToMin);
+	}
+
+	// Left upper arm
+	LUArmAnimatedZ = 45.0;
+	diamondAnimated += 8.0;
 
 	// Left Lower Arm
-	LLArmAnimatedX = -90;
-	calAnimatedValue(LLArmAnimatedZ, -90, 0, llHandToMax, llHandToMin);
-
-	// Right Upper Arm
-	RUArmAnimatedX = 90;
-	RUArmAnimatedY = 14;
-	calAnimatedValue(RUArmAnimatedZ, -90, 0, ruHandToMax, ruHandToMin);
-
-	// Right Lower Arm
-	RLArmAnimatedX += 10.5;
-	//calAnimatedValue(RLArmAnimatedZ, 10, 90, ruHandToMax, ruHandToMin);
+	setAnimatedValue(LLArmAnimatedZ, 0.55, -45.0, 0.0, llHandToMax, llHandToMin);
 
 	// Left Leg
-	calAnimatedValue(LLegAnimatedX, -45, 45, lLegToMax, lLegToMin);
+	setAnimatedValue(LLegAnimatedX, 0.55, -45, 45, lLegToMax, lLegToMin);
 
 	// Right Leg
-	calAnimatedValue(RLegAnimatedX, -45, 45, rlegToMax, rlegToMin);
+	setAnimatedValue(RLegAnimatedX, 0.55, -45, 45, rlegToMax, rlegToMin);
 
 }
 
+
 // Reset all animated values
 void Keepon::endAnimation() {
+
+	happyMood = false;
+	angryMood = false;
 
 	baseAnimatedX = 0.0;
 	baseAnimatedY = 0.0;
@@ -615,16 +688,22 @@ void Keepon::endAnimation() {
 	baseAnimatedRotateX = 0.0;
 	baseAnimatedRotateY = 0.0;
 	baseAnimatedRotateZ = 0.0;
-	circleIndex = 0;
+	circleSpeed = 0.0f;
 
-	diamondAnimated = 0.0;
 	headAnimatedX = 0.0;
 	headAnimatedY = 0.0;
 	headAnimatedZ = 0.0;
 
+	noseAnimated = 0.0,
+
+	LWingAnimated = 0.0;
+	RWingAnimated = 0.0;
+
 	LUArmAnimatedX = 0.0;
 	LUArmAnimatedY = 0.0;
 	LUArmAnimatedZ = 0.0;
+
+	diamondAnimated = 0.0;
 
 	LLArmAnimatedX = 0.0;
 	LLArmAnimatedY = 0.0;
@@ -644,8 +723,14 @@ void Keepon::endAnimation() {
 	baseToMax = true;
 	baseToMin = false;
 
-	headToMax = true;
-	headToMin = false;
+	headToMax = false;
+	headToMin = true;
+
+	lWingToMax = true;
+	lWingToMin = false;
+
+	rWingToMax = true;
+	rWingToMin = false;
 
 	luHandToMax = false;
 	luHandToMin = true;
@@ -749,8 +834,12 @@ int main()
 	controls[ZLIGHT] = ModelerControl("Default Light Z Position", -30, 30, 0.1f, 9);
 	controls[INTENSITY] = ModelerControl("Default Light Intensity", 0, 5, 0.1f, 1.3);
 
+	controls[ANIMATION_HAPPY_MOOD] = ModelerControl("Happy Mood", 0, 1, 1, 0);
+	controls[ANIMATION_ANGRY_MOOD] = ModelerControl("Angry Mood", 0, 1, 1, 0);
+
 	controls[INDIVIDUAL_LOOKING_NOSE_LENGTH] = ModelerControl("Individual Looking Nose Length", 0.1, 2, 0.1, 0.1);
 	controls[INDIVIDUAL_LOOKING_CHOICE_OF_WEAPON] = ModelerControl("Individual Looking Choice of Weapon", 1, 3, 1, 1);
+	controls[INDIVIDUAL_LOOKING_CHOICE_OF_DIAMOND] = ModelerControl("Individual Looking Choice of Diamond", 1, 3, 1, 1);
 	controls[INDIVIDUAL_LOOKING_EYE_SIZE] = ModelerControl("Individual Looking Eye Size", 0.1, 0.3, 0.02, 0.1);
 	controls[INDIVIDUAL_LOOKING_WINGS] = ModelerControl("Individual Looking Wings", 0, 1, 1, 1);
 	controls[INDIVIDUAL_LOOKING_WINGS_SIZE] = ModelerControl("Individual Looking Wings Size", 1, 4, 0.1f, 1);

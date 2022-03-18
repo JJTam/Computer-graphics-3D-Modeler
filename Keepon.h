@@ -22,7 +22,7 @@ public:
 	void endAnimation();
 
 	void setDefaultLight();
-	void calAnimatedValue(double& value, int min, int max, bool& toMax, bool& toMin);
+	void setAnimatedValue(double& value, double step, double min, double max, bool& toMax, bool& toMin);
 
 private:
 
@@ -41,7 +41,15 @@ private:
 		headAnimatedY = 0.0,
 		headAnimatedZ = 0.0,
 
-		diamondAnimated = 0.0,
+		noseAnimated = 0.0,
+		
+
+		// Left Wing
+		LWingAnimated = 0.0,
+
+		// Right Wing
+		RWingAnimated = 0.0,
+
 
 		// Left Upper Arm
 		LUArmAnimatedX = 0.0,
@@ -49,6 +57,8 @@ private:
 		LUArmAnimatedZ = 0.0,
 
 		// Left Lower Arm
+		diamondAnimated = 0.0,
+
 		LLArmAnimatedX = 0.0,
 		LLArmAnimatedY = 0.0,
 		LLArmAnimatedZ = 0.0,
@@ -69,14 +79,20 @@ private:
 		// Right Leg
 		RLegAnimatedX = 0.0;
 
-		int circleIndex = 0;
+		float circleSpeed = 0;
 
 		bool
 			baseToMax = true,
 			baseToMin = false,
 
-			headToMax = true,
-			headToMin = false,
+			headToMax = false,
+			headToMin = true,
+
+			lWingToMax = true,
+			lWingToMin = false,
+
+			rWingToMax = true,
+			rWingToMin = false,
 
 			luHandToMax = false,
 			luHandToMin = true,
@@ -95,6 +111,10 @@ private:
 
 			rlegToMax = true,
 			rlegToMin = false;
+
+		bool
+			happyMood = false,
+			angryMood = false;
 
 	// add others here
 

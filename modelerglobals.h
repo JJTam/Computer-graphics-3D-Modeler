@@ -53,8 +53,12 @@ enum SampleModelControls
 
 	HAMMER_WIDTH,
 
+	ANIMATION_HAPPY_MOOD,
+	ANIMATION_ANGRY_MOOD,
+
 	INDIVIDUAL_LOOKING_NOSE_LENGTH,
 	INDIVIDUAL_LOOKING_CHOICE_OF_WEAPON,
+	INDIVIDUAL_LOOKING_CHOICE_OF_DIAMOND,
 	INDIVIDUAL_LOOKING_EYE_SIZE,
 	INDIVIDUAL_LOOKING_WINGS,
 	INDIVIDUAL_LOOKING_LEFT_WING_ROTATE,
@@ -85,9 +89,12 @@ enum SampleModelControls
 #define COLOR_YELLOW	1.0f, 1.0f, 0.0f
 #define COLOR_BLACK		0.0f, 0.0f, 0.0f
 #define COLOR_ROSE		255.0f, 219.0f, 232.0f 
+#define COLOR_PURPLE	100.0f, 0.0f, 100.0f 
 
 // We'll be getting the instance of the application a lot; 
 // might as well have it as a macro.
 #define VAL(x) (ModelerApplication::Instance()->GetControlValue(x))
+
+#define SVAL(x, v) (ModelerApplication::Instance()->SetControlValue(x, v))
 
 #endif
