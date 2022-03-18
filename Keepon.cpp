@@ -498,6 +498,16 @@ void Keepon::draw()
 
 						if (VAL(LEVEL_OF_DETAILS) > 5) {
 			
+							// draw the meta ball
+							glPushMatrix();
+							//glRotated(180, 0.0, 1.0, 0.0);
+							glTranslated(0.0, 1.5, 0.0);
+							glScaled(VAL(METABALL_RADIUS), VAL(METABALL_RADIUS), VAL(METABALL_RADIUS));
+							glTranslated(-VAL(METABALL_RADIUS) * 2, 0, -VAL(METABALL_RADIUS) * 2);
+							MetaBall metaball(VAL(METABALL_DISTANCE_DIFFERENCE));
+							metaball.drawMetaBall();
+							glPopMatrix();
+
 							if (VAL(INDIVIDUAL_LOOKING_CHOICE_OF_DIAMOND) == 1) {
 								glRotated(diamondAnimated, 0.0, 1.0, 0.0);
 								glTranslated(0.0, 2.0, 0.0);
@@ -855,6 +865,10 @@ int main()
 	controls[L_SYSTEM_TREE_ANGLE] = ModelerControl("L-system Tree Angle", 30, 60, 1, 30);
 	controls[L_SYSTEM_TREE_LEVEL] = ModelerControl("L-system Tree Level", 0, 5, 1, 3);
 
+	controls[METABALL_RADIUS] = ModelerControl("MetaBall Radius", 0.2, 2, 0.1, 1.0);
+	controls[METABALL_DISTANCE_DIFFERENCE] = ModelerControl("MetaBall distance difference", 3.7, 6, 0.1, 4.3);
+
+	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();

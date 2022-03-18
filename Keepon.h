@@ -7,6 +7,7 @@
 #include "modelerglobals.h"
 #include "bitmap.h"
 #include "LSystemTree.h"
+#include "MetaBall.h"
 
 class Keepon: public ModelerView
 {
