@@ -1,7 +1,7 @@
 #include "MetaBall.h"
 
-MetaBall::MetaBall(float heightOfSecondBall)
-	: ball1(2, 2, 2), ball2(2, heightOfSecondBall, 2)
+MetaBall::MetaBall(float distanceDifference)
+	: ball1(2, 4 - distanceDifference, 2), ball2(2, 4 + distanceDifference, 2)
 {
 }
 
@@ -32,10 +32,11 @@ void MetaBall::drawMetaBall()
 					Vec3f currentVertex(x, y, z);
 					GRIDCELL gridcell = generateGridCell(currentVertex);
 					num_triangle = MarchingCube::Polygonise(gridcell, 1, triangles);
-
 					for (int i = 0; i < num_triangle; i++)
 					{
+						Vec3f normalVector = calculateNormalVector(triangles[i].point[0], triangles[i].point[1], triangles[i].point[2]);
 						glBegin(GL_TRIANGLES);
+							glNormal3f(normalVector[0], normalVector[1], normalVector[2]);
 							glVertex3f(triangles[i].point[0][0], triangles[i].point[0][1], triangles[i].point[0][2]);
 							glVertex3f(triangles[i].point[1][0], triangles[i].point[1][1], triangles[i].point[1][2]);
 							glVertex3f(triangles[i].point[2][0], triangles[i].point[2][1], triangles[i].point[2][2]);
@@ -67,3 +68,24 @@ GRIDCELL MetaBall::generateGridCell(Vec3f vertex)
 
 	return gridCell;
 }
+
+Vec3f MetaBall::crossProduct(Vec3f vector1, Vec3f vector2)
+{
+	Vec3f resultVector(		vector1[0] * vector2[2] - vector1[2] * vector2[1],
+						  -(vector1[0] * vector2[2] - vector1[2] * vector2[0]),
+							vector1[0] * vector2[1] - vector1[1] * vector2[0]	);
+
+	return resultVector;
+}
+
+Vec3f MetaBall::calculateNormalVector(Vec3f vector1, Vec3f vector2, Vec3f vector3)
+{
+	Vec3f x(vector1[0] - vector2[0], vector1[1] - vector2[0], vector1[2] - vector2[2]);
+	Vec3f y(vector2[0] - vector3[0], vector2[1] - vector3[0], vector2[2] - vector3[2]);
+
+	Vec3f result = crossProduct(x, y);
+	result.normalize();
+
+	return result;
+}
+

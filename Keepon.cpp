@@ -435,6 +435,8 @@ void Keepon::draw()
 					glPopMatrix();
 				}
 
+				setDiffuseColor(COLOR_YELLOW);
+
 				// draw the left leg
 				glPushMatrix();
 				glTranslated(0.3, -1.8, -0.3);
@@ -500,7 +502,7 @@ void Keepon::draw()
 			
 							// draw the meta ball
 							glPushMatrix();
-							//glRotated(180, 0.0, 1.0, 0.0);
+							//glRotated(90, 0.0, 1.0, 0.0);
 							glTranslated(0.0, 1.5, 0.0);
 							glScaled(VAL(METABALL_RADIUS), VAL(METABALL_RADIUS), VAL(METABALL_RADIUS));
 							glTranslated(-VAL(METABALL_RADIUS) * 2, 0, -VAL(METABALL_RADIUS) * 2);
@@ -866,7 +868,7 @@ int main()
 	controls[L_SYSTEM_TREE_LEVEL] = ModelerControl("L-system Tree Level", 0, 5, 1, 3);
 
 	controls[METABALL_RADIUS] = ModelerControl("MetaBall Radius", 0.2, 2, 0.1, 1.0);
-	controls[METABALL_DISTANCE_DIFFERENCE] = ModelerControl("MetaBall distance difference", 3.7, 6, 0.1, 4.3);
+	controls[METABALL_DISTANCE_DIFFERENCE] = ModelerControl("MetaBall distance difference", 0.5, 2, 0.1, 1);
 
 	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
 

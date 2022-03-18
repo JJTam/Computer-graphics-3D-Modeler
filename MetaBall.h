@@ -16,7 +16,7 @@ public:
 	float threshold = 1.0;
 	float gridSize = 0.25;
 	float radius = 1;
-	float heightOfSecondBall;
+	float distanceDifference;
 
 	float xLength = 4.0;
 	float yLength = 12.0;
@@ -28,11 +28,13 @@ public:
 
 
 public:
-	MetaBall(float heightOfSecondBall);
+	MetaBall(float distanceDifference);
 	float calculateEnergy(float radius, Vec3f point, Vec3f centerOfSphere);
 	float differenceOfTwoBall(Vec3f ball1, Vec3f ball2);
 	void drawMetaBall();
 	GRIDCELL generateGridCell(Vec3f vertex);
-	
+
+	Vec3f crossProduct(Vec3f vector1, Vec3f vector2);
+	Vec3f calculateNormalVector(Vec3f vector1, Vec3f vector2, Vec3f vector3);
 };
 
