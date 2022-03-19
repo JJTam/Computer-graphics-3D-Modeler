@@ -15,6 +15,7 @@ const float kMouseRotationSensitivity		= 1.0f/90.0f;
 const float kMouseTranslationXSensitivity	= 0.03f;
 const float kMouseTranslationYSensitivity	= 0.03f;
 const float kMouseZoomSensitivity			= 0.08f;
+const float kMouseTwistSensitivity			= 0.03f;
 
 void MakeDiagonal(Mat4f &m, float k)
 {
@@ -70,6 +71,16 @@ void MakeHRotZ(Mat4f &m, float theta)
 	m[1][1] = cosTheta;
 }
 
+void MakeVRotZ(Vec3f& v, float theta)
+{
+	float cosTheta = cos(theta);
+	float sinTheta = sin(theta);
+	float newX = cosTheta * v[0] - sinTheta * v[1];
+	float newY = sinTheta * v[0] + cosTheta * v[1];
+	v[0] = newX;
+	v[1] = newY;
+}
+
 
 void Camera::calculateViewingTransformParameters() 
 {
@@ -92,9 +103,11 @@ void Camera::calculateViewingTransformParameters()
 	mPosition = originXform * (azimXform * (elevXform * (dollyXform * mPosition)));
 
 	if ( fmod((double)mElevation, 2.0*M_PI) < 3*M_PI/2 && fmod((double)mElevation, 2.0*M_PI) > M_PI/2 )
-		mUpVector= Vec3f(0,-1,0);
+		mUpVector= Vec3f(sin(mTwist), -cos(mTwist), 0);
 	else
-		mUpVector= Vec3f(0,1,0);
+		mUpVector= Vec3f(sin(mTwist), cos(mTwist), 0);
+
+	mUpVector.normalize();
 
 	mDirtyTransform = false;
 }
@@ -130,8 +143,8 @@ void Camera::dragMouse( int x, int y )
 		{
 			calculateViewingTransformParameters();
 
-			double xTrack =  -mouseDelta[0] * kMouseTranslationXSensitivity;
-			double yTrack =  mouseDelta[1] * kMouseTranslationYSensitivity;
+			double xTrack = -mouseDelta[0] * kMouseTranslationXSensitivity;
+			double yTrack = mouseDelta[1] * kMouseTranslationYSensitivity;
 
 			Vec3f transXAxis = mUpVector ^ (mPosition - mLookAt);
 			transXAxis /= sqrt((transXAxis*transXAxis));
@@ -144,8 +157,8 @@ void Camera::dragMouse( int x, int y )
 		}
 	case kActionRotate:
 		{
-			float dAzimuth		=   -mouseDelta[0] * kMouseRotationSensitivity;
-			float dElevation	=   mouseDelta[1] * kMouseRotationSensitivity;
+			float dAzimuth = -mouseDelta[0] * kMouseRotationSensitivity;
+			float dElevation = mouseDelta[1] * kMouseRotationSensitivity;
 			
 			setAzimuth(getAzimuth() + dAzimuth);
 			setElevation(getElevation() + dElevation);
@@ -159,7 +172,11 @@ void Camera::dragMouse( int x, int y )
 			break;
 		}
 	case kActionTwist:
-		// Not implemented
+		{
+			float dTwist = -mouseDelta[0] * kMouseTwistSensitivity;
+			setTwist(getTwist() + dTwist);
+			break;
+		}
 	default:
 		break;
 	}
@@ -178,9 +195,68 @@ void Camera::applyViewingTransform() {
 
 	// Place the camera at mPosition, aim the camera at
 	// mLookAt, and twist the camera such that mUpVector is up
-	gluLookAt(	mPosition[0], mPosition[1], mPosition[2],
-				mLookAt[0],   mLookAt[1],   mLookAt[2],
-				mUpVector[0], mUpVector[1], mUpVector[2]);
+	//gluLookAt(mPosition[0], mPosition[1], mPosition[2],
+	//			mLookAt[0],   mLookAt[1],   mLookAt[2],
+	//			mUpVector[0], mUpVector[1], mUpVector[2]);
+
+	// Call our lookAt function
+	lookAt(mPosition, mLookAt, mUpVector);
+
+	//printf("mElevation %f ", mElevation);
+	//printf("mAzimuth %f ", mAzimuth);
+	//printf("mTwist %f ", mTwist);
+	//printf("mDolly %f ", mDolly);
+
+	//printf("mLookAt X %f ", mLookAt[0]);
+	//printf("mLookAt Y %f ", mLookAt[1]);
+	//printf("mLookAt Z %f ", mLookAt[2]);
+
+	//printf("mPosition X %f ", mPosition[0]);
+	//printf("mPosition Y %f ", mPosition[1]);
+	//printf("mPosition Z %f ", mPosition[2]);
+
 }
+
+
+/* 
+* Ref: https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/gluLookAt.xml
+*
+*/
+void Camera::lookAt(Vec3f eye, Vec3f at, Vec3f up) {
+
+	Vec3f Ftor(at[0] - eye[0], at[1] - eye[1], at[2] - eye[2]);
+	Vec3f Uptor(up[0], up[1], up[2]);
+	Ftor.normalize();
+	Uptor.normalize();
+
+	Vec3f S = Ftor ^ Uptor;
+	Vec3f U = S ^ Ftor;
+
+	Mat4f M (
+		S[0],		S[1],		S[2],		0,
+		U[0],		U[1],		U[2],		0,
+		-Ftor[0],	-Ftor[1],	-Ftor[2],	0,
+		0,			0,			0,			1
+	);
+
+	float mat[16];
+	M.getGLMatrix(mat);
+
+	glMultMatrixf(mat);
+	glTranslated(-eye[0], -eye[1], -eye[2]);
+}
+
+
+void Camera::frameAll() {
+
+	mDirtyTransform = true;
+	//mTwist = 0.0f;
+	//mElevation = 7.049853f;
+	//mAzimuth = (float)M_PI;
+	mDolly = -40.19991f;
+	mLookAt = Vec3f(0.0, 0.0, 0.0);
+	mPosition = Vec3f(0.0, 20.3, 21.0);
+}
+
 
 #pragma warning(pop)
