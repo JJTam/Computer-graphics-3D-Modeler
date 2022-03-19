@@ -284,7 +284,7 @@ void drawWeapon()
 
 
 
-void drawHatWithTexture()
+void drawObjectWithTexture(void (*drawObject) ())
 {
 	int width, height, nrChannels;
 	unsigned char* data;
@@ -316,7 +316,7 @@ void drawHatWithTexture()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	drawHat();
+	drawObject();
 
 	glDisable(GL_TEXTURE_2D);
 
@@ -428,8 +428,9 @@ void Keepon::draw()
 				glRotated(VAL(TORSO_ROTATE_Y) + baseAnimatedRotateY, 0, 1, 0);
 				glRotated(VAL(TORSO_ROTATE_Z) + baseAnimatedRotateZ, 0, 0, 1);
 				glTranslated(0.0, 2.0 + 1.5, 0.0);				// radius of torso + length of leg 
-				drawTorso();
-
+				//drawTorso();
+				drawObjectWithTexture(&drawTorso);
+			
 				if (VAL(INDIVIDUAL_LOOKING_WINGS) && VAL(LEVEL_OF_DETAILS) > 4) {
 					// draw the left wing
 					setDiffuseColor(COLOR_YELLOW);
@@ -560,7 +561,7 @@ void Keepon::draw()
 						{
 							// draw the hat
 							//drawHat();
-							drawHatWithTexture();
+							drawObjectWithTexture(&drawHat);
 						}
 						glRotated(90, 1.0, 0.0, 0.0);
 						//if (VAL(LEVEL_OF_DETAILS)>5)
@@ -813,6 +814,8 @@ int main()
 
 	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
 
+	controls[TEXTURE_CHOICE] = ModelerControl("Texture Choice", 1, 3, 1, 1);
+
 	controls[XPOS] = ModelerControl("Base X Position", -5, 5, 0.1f, 0);
 	controls[YPOS] = ModelerControl("Base Y Position", 0, 5, 0.1f, 0);
 	controls[ZPOS] = ModelerControl("Base Z Position", -5, 5, 0.1f, 0);
@@ -883,9 +886,6 @@ int main()
 	controls[METABALL_RADIUS] = ModelerControl("MetaBall Radius", 0.2, 2, 0.1, 1.0);
 	controls[METABALL_DISTANCE_DIFFERENCE] = ModelerControl("MetaBall distance difference", 0.5, 2, 0.1, 1);
 
-	controls[LEVEL_OF_DETAILS] = ModelerControl("Level of Details", 0, 7, 1, 7);
-
-	controls[TEXTURE_CHOICE] = ModelerControl("Texture Choice", 1, 3, 1, 1);
 
 	ModelerApplication::Instance()->Init(&createKeeponModel, controls, NUMCONTROLS);
 	return ModelerApplication::Instance()->Run();

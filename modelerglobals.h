@@ -13,6 +13,8 @@ enum SampleModelControls
 
 	LEVEL_OF_DETAILS,
 
+	TEXTURE_CHOICE,
+
 	XPOS,
 	YPOS,
 	ZPOS,
@@ -81,8 +83,6 @@ enum SampleModelControls
 
 	METABALL_RADIUS,
 	METABALL_DISTANCE_DIFFERENCE,
-
-	TEXTURE_CHOICE,
 
 	NUMCONTROLS
 };
