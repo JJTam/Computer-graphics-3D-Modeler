@@ -6,7 +6,7 @@
 
 void drawTorso()
 {
-	setDiffuseColor(VAL(INDIVIDUAL_LOOKING_TORSO_COLOR_RED) / 255, VAL(INDIVIDUAL_LOOKING_TORSO_COLOR_GREEN) /255, VAL(INDIVIDUAL_LOOKING_TORSO_COLOR_BLUE) / 255);
+	/*setDiffuseColor(VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_RED) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_GREEN) /255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_BLUE) / 255);*/
 	drawSphere(2);
 	setDiffuseColor(COLOR_GREEN);
 }
@@ -418,7 +418,8 @@ void Keepon::draw()
 
 			// draw the sample model
 			setAmbientColor(.1f, .1f, .1f);
-			setDiffuseColor(COLOR_GREEN);
+			//setDiffuseColor(COLOR_GREEN);
+			setDiffuseColor(VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_RED) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_GREEN) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_BLUE) / 255);
 			glPushMatrix();
 			glTranslated(VAL(XPOS) + baseAnimatedX, VAL(YPOS) + baseAnimatedY, VAL(ZPOS) + baseAnimatedZ);
 
@@ -433,7 +434,7 @@ void Keepon::draw()
 			
 				if (VAL(INDIVIDUAL_LOOKING_WINGS) && VAL(LEVEL_OF_DETAILS) > 4) {
 					// draw the left wing
-					setDiffuseColor(COLOR_YELLOW);
+					setDiffuseColor(VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_RED) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_GREEN) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_BLUE) / 255);
 
 					glPushMatrix();
 					glTranslated(0.3, -1.0, -1.7);
@@ -449,7 +450,7 @@ void Keepon::draw()
 					glPopMatrix();
 				}
 
-				setDiffuseColor(COLOR_YELLOW);
+				setDiffuseColor(VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_RED) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_GREEN) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_BLUE) / 255);
 
 				// draw the left leg
 				glPushMatrix();
@@ -494,7 +495,7 @@ void Keepon::draw()
 					glPopMatrix();
 				glPopMatrix();
 
-					setDiffuseColor(COLOR_YELLOW);
+				setDiffuseColor(VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_RED) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_GREEN) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_BLUE) / 255);
 					// draw the left upper arm
 					glPushMatrix();
 					glTranslated(1.8, 0.2, 0.0);
@@ -514,6 +515,7 @@ void Keepon::draw()
 
 						if (VAL(LEVEL_OF_DETAILS) > 5) {
 			
+							setDiffuseColor(COLOR_YELLOW);
 							// draw the meta ball
 							glPushMatrix();
 							//glRotated(90, 0.0, 1.0, 0.0);
@@ -544,7 +546,7 @@ void Keepon::draw()
 						glPopMatrix();
 					glPopMatrix();
 
-					setDiffuseColor(COLOR_YELLOW);
+					setDiffuseColor(VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_RED) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_GREEN) / 255, VAL(INDIVIDUAL_LOOKING_SKIN_COLOR_BLUE) / 255);
 					glPushMatrix();
 					glTranslated(0.0, 3.0 + VAL(HEADHEIGHT), 0.0);
 					glRotated(VAL(HEAD_ROTATE_X) + headAnimatedX, 1, 0, 0);
@@ -873,9 +875,9 @@ int main()
 	controls[INDIVIDUAL_LOOKING_WINGS_SIZE] = ModelerControl("Individual Looking Wings Size", 1, 4, 0.1f, 1);
 	controls[INDIVIDUAL_LOOKING_LEFT_WING_ROTATE] = ModelerControl("Individual Looking Left Wing Rotate", -20, 35, 0.1f, 0);
 	controls[INDIVIDUAL_LOOKING_RIGHT_WING_ROTATE] = ModelerControl("Individual Looking Right Wing Rotate", -20, 35, 0.1f, 0);
-	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_RED] = ModelerControl("Individual Looking Torso Color Red", 0, 255, 1, 0);
-	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_GREEN] = ModelerControl("Individual Looking Torso Color Green", 0, 255, 1, 255);
-	controls[INDIVIDUAL_LOOKING_TORSO_COLOR_BLUE] = ModelerControl("Individual Looking Torso Color Blue", 0, 255, 1, 0);
+	controls[INDIVIDUAL_LOOKING_SKIN_COLOR_RED] = ModelerControl("Individual Looking Skin Color Red", 0, 255, 1, 255);
+	controls[INDIVIDUAL_LOOKING_SKIN_COLOR_GREEN] = ModelerControl("Individual Looking Skin Color Green", 0, 255, 1, 255);
+	controls[INDIVIDUAL_LOOKING_SKIN_COLOR_BLUE] = ModelerControl("Individual Looking Skin Color Blue", 0, 255, 1, 0);
 
 	controls[L_SYSTEM_TREE_ON] = ModelerControl("L-system ON", 0, 1, 1, 0);
 	controls[L_SYSTEM_TREE_LENGTH] = ModelerControl("L-system Tree Length", 1, 2.0, 0.1, 1);
